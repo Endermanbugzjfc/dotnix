@@ -1,11 +1,11 @@
 { pkgs, lib, ... }: {
   environment.systemPackages = with pkgs; [
-# TODO: wl persistent
-
+    wl-persistent
     wget
     wl-clipboard
     p7zip
     ripgrep
+    neofetch
 
     comma # Runs programs without installing, useful for reading --help.
   ];
@@ -15,4 +15,5 @@
     defaultEditor = true;
   };
   programs.screen.enable = lib.mkDefault true;
+  programs.git.enable = lib.mkDefault true;
 }
