@@ -12,6 +12,7 @@ pkgs.stdenv.mkDerivation rec {
     repo = "animdustry";
     rev = "v" + version;
     # hash = "sha256-QWr+xog16MmybhQlEWbskYa/dypb9Ld54MOdobTbyMo=";
+    fetchSubmodules = true;
   };
 
   # https://nixos.org/manual/nixpkgs/stable/#var-stdenv-depsBuildBuild

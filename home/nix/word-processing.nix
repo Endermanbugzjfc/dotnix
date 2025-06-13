@@ -6,6 +6,7 @@
     plover.dev
 
     wpsoffice
+    xournalpp
   ];
 
   programs.onlyoffice.enable = true;

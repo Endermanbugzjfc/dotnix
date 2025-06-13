@@ -4,6 +4,8 @@
 
 { pkgs, lib, ... }: {
   imports = [
+    ../common
+
     ./environments
     ./games
 
