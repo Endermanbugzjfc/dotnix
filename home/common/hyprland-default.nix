@@ -48,7 +48,7 @@ lib: {
     # Set programs that you use
     "$terminal" = "kitty";
     "$fileManager" = "dolphin";
-    "$menu" = "wofi" --show drun;
+    "$menu" = "wofi --show drun";
 
 
     #################
@@ -99,7 +99,7 @@ lib: {
     # Refer to https://wiki.hyprland.org/Configuring/Variables/
 
     # https://wiki.hyprland.org/Configuring/Variables/#general
-    general {
+    general = {
       "gaps_in" = "5";
       "gaps_out" = "20";
 
@@ -319,7 +319,7 @@ lib: {
     ",XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
   ];
 
-  bindel = [
+  bindl = [
     # Requires playerctl
     ", XF86AudioNext, exec, playerctl next"
     ", XF86AudioPause, exec, playerctl play-pause"

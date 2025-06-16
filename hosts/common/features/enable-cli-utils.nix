@@ -1,6 +1,6 @@
 { pkgs, lib, ... }: {
   environment.systemPackages = with pkgs; [
-    wl-persistent
+    wl-clip-persist
     wget
     wl-clipboard
     p7zip

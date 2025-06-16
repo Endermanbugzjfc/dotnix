@@ -56,14 +56,15 @@
 
     flake = {inherit inputs outputs; };
   in {
-    nixosConfigurations.nix = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
       specialArgs = flake;
       modules = [
         ./hosts/nix
         agenix.nixosModules.default
         home-manager.nixosModules.home-manager {
           home-manager.extraSpecialArgs = flake;
-          home-manager.users.rickastley = ./home/nix/home.nix;
+          home-manager.users."rickastley" = ./home/nix/home.nix;
         }
       ];
     };

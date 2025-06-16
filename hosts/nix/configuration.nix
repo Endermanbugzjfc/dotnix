@@ -45,7 +45,7 @@
     # packages = inputs.home-manager.packages.${pkgs.system}.default; # TODO
     hashedPassword = "$6$NFrzKpfF7MSxfvJN$aBoL3OzUeVmQhGjK7djbUXwIasugoscWvKE7fq5omY5hnknFD81rcPFC.laVQCbqRpFCoRCup3MTl9YX9gPyZ.";
 
-    shell = pkgs.nushell;
+    shell = pkgs.nushell; # TODO: configure to use std/dirs and its shell aliases
   };
 
   # Allow unfree packages

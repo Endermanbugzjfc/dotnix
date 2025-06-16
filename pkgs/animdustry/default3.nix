@@ -1,33 +1,41 @@
 {
-  stdenv,
   lib,
+  buildNimPackage,
   fetchFromGitHub,
 
-  nimble,
   xorg,
   libGL,
-  cacert,
-  openssl,
-  git,
   copyDesktopItems,
   makeDesktopItem,
-}:
-stdenv.mkDerivation rec {
-  pname = "animdustry";
-  version = "1.2";
-
-  src = fetchFromGitHub {
+}: let
+  animdustry = fetchFromGitHub {
     owner = "anuken";
     repo = "animdustry";
-    rev = "v" + version;
+    rev = "v" + final.version;
     deepClone = true;
     leaveDotGit = true;
     hash = "sha256-gOa/LUBjQYcgW9QBlR/2zO114ngxwkkYd0nFwLmVsaw=";
   };
 
-  # https://nixos.org/manual/nixpkgs/stable/#var-stdenv-depsBuildBuild
-  depsBuildBuild = [ nimble ];
-  # https://gist.github.com/CMCDragonkai/45359ee894bc0c7f90d562c4841117b5
+  fau = buildNimPackage (final: prev: {
+    src = fetchFromGitHub {
+      owner = "anuken";
+      repo = "fau";
+      rev = "v" + final.version;
+      deepClone = true;
+      leaveDotGit = true;
+      hash = "sha256-gOa/LUBjQYcgW9QBlR/2zO114ngxwkkYd0nFwLmVsaw=";
+    };
+  });
+  msgpack4nim = fetchFromGitHub {
+
+  };
+in buildNimPackage (final: prev: {
+  pname = "animdustry";
+  version = "1.2";
+
+  src = animdustry;
+
   nativeBuildInputs = [ # (depsBuildHost)
     xorg.libX11
     xorg.libXcursor
@@ -38,36 +46,26 @@ stdenv.mkDerivation rec {
     xorg.libXxf86vm
     # TODO: compile for wayland
 
-    openssl
-    git
+    # git
     copyDesktopItems
   ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
+  # doCheck = false;
 
-  NIMBLE_DIR= (builtins.toString ./.) + "/.nimble";
-  PATH="$PATH:$NIMBLE_DIR/bin";
-  configurePhase = ''
-    runHook preConfigure
+  nimbleFile = "animdustry.nimble";
 
-    mkdir -p $NIMBLE_DIR/bin
-
-    nimble --version
-    nimble install -y -d --verbose --noSslCheck
-
-    runHook postConfigure
+  NIMBLE_DIR = (builtins.toString ./.) + "/.nimble";
+  PATH = "$PATH:$NIMBLE_DIR/bin";
+  postConfigure = ''
+    nimble install -y -d
   '';
 
-  # https://nixos.org/manual/nixpkgs/stable/#sec-stdenv-phases
-  buildPhase = ''
-    runHook preBuild
-
+  postBuild = ''
     nimble deploy lin
-
-    runHook postBuild
   '';
-
-  installPhase = ''
+  installPhase = # Avoid the installation of dependencies (faupack).
+  ''
     runHook preInstall
 
     install -Dm644 ./assets/icon.png $out/share/icons/hicolor/64x64/apps/animdustry.png
@@ -80,11 +78,12 @@ stdenv.mkDerivation rec {
   desktopItems = let
     name = "Animdustry";
     exec = "animdustry";
-  in makeDesktopItem {
-    inherit name, exec;
-
     icon = exec;
+  in makeDesktopItem {
+    name = name;
     desktopName = name;
+    icon = icon;
+    exec = exec;
     categories = [ "Game" ];
   };
 
@@ -96,6 +95,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/Anuken/animdustry/releases";
     sourceProvenance = with sourceTypes; [ fromSource ];
     license = licenses.gpl3;
-    platforms = platforms.all;
+    # platforms = platforms.all;
   };
-}
+})

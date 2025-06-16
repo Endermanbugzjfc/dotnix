@@ -9,5 +9,6 @@
     ./desktop.nix
     ./bootloader.nix
     ./cross-platform.nix
+    ./utils.nix
   ];
 }

@@ -2,6 +2,6 @@
 
 {
   imports = [
-    "hyprland-default.nix"
+    ./hyprland-default.nix
   ];
 }
