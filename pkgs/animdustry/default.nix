@@ -1,33 +1,60 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
+  fetchgit,
+  buildNimPackage,
+  callPackage,
 
-  nimble,
   xorg,
   libGL,
-  cacert,
-  openssl,
-  git,
+
   copyDesktopItems,
   makeDesktopItem,
-}:
-stdenv.mkDerivation rec {
-  pname = "animdustry";
-  version = "1.2";
-
-  src = fetchFromGitHub {
-    owner = "anuken";
+}: let
+  animdustry = fetchFromGitHub {
+    owner = "Anuken";
     repo = "animdustry";
-    rev = "v" + version;
-    deepClone = true;
-    leaveDotGit = true;
-    hash = "sha256-gOa/LUBjQYcgW9QBlR/2zO114ngxwkkYd0nFwLmVsaw=";
+    rev = "f408e632872929964a9b3f8888f1c7a18e6c1ead";
+    hash = lib.fakeHash;
   };
 
-  # https://nixos.org/manual/nixpkgs/stable/#var-stdenv-depsBuildBuild
-  depsBuildBuild = [ nimble ];
-  # https://gist.github.com/CMCDragonkai/45359ee894bc0c7f90d562c4841117b5
+  nimble2nix = fetchFromGitHub {
+    owner = "bandithedoge";
+    repo = "nimble2nix";
+    rev = "6a6c4da2e2b3cc3b643744b76ecd8bb08f6be3a3";
+    hash = lib.fakeHash;
+  };
+  buildNimblePackage = callPackage (nimble2nix + "/buildNixPackage.nix");
+  nimble2nixTool = callPackage (nimble2nix + "/default.nix");
+  # buildNimblePackage = (import nimble2nix + "/buildNimblePackage.nix"  { pks = {
+  #   inherit lib, fetchgit;
+  #   nimPackages = { inherit buildNimPackage };
+  # }});
+
+  makeNimble2nixFile = {
+  };
+  fau = buildNimblePackage {
+    pname = "fau";
+    verison = "0-unstable-2024-07-28"; # TODO: look at how makeDesktopItem defines so I can generate JSON as nativeBuildInput.
+
+    nativeBuildInputs = [ makeNimble2nixFile ];
+
+    src = fetchFromGitHub {
+      owner = "Anuken";
+      repo = "fau";
+      rev = "1a4ce2a80c8aa5807cf922fd72d30b2ef7154fd6";
+      hash = lib.fakeHash;
+    };
+  };
+
+
+in stdenv.mkDerivation {
+  pname = "animdustry";
+  version = "0-unstable-2024-07-30";
+  inherit version;
+
+  src = animdustry;
+
   nativeBuildInputs = [ # (depsBuildHost)
     xorg.libX11
     xorg.libXcursor
@@ -38,35 +65,24 @@ stdenv.mkDerivation rec {
     xorg.libXxf86vm
     # TODO: compile for wayland
 
-    openssl
-    git
+    # git
     copyDesktopItems
   ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
+  # doCheck = false;
 
-  NIMBLE_DIR= (builtins.toString ./.) + "/.nimble";
-  PATH="$PATH:$NIMBLE_DIR/bin";
-  configurePhase = ''
-    runHook preConfigure
+  nimbleFile = "animdustry.nimble";
 
-    mkdir -p $NIMBLE_DIR/bin
-
-    nimble --version
-    nimble install -y -d --verbose --noSslCheck
-
-    runHook postConfigure
+  NIMBLE_DIR = (builtins.toString ./.) + "/.nimble";
+  PATH = "$PATH:$NIMBLE_DIR/bin";
+  postConfigure = ''
+    nimble install -y -d
   '';
 
-  # https://nixos.org/manual/nixpkgs/stable/#sec-stdenv-phases
-  buildPhase = ''
-    runHook preBuild
-
+  postBuild = ''
     nimble deploy lin
-
-    runHook postBuild
   '';
-
   installPhase = ''
     runHook preInstall
 
@@ -80,11 +96,12 @@ stdenv.mkDerivation rec {
   desktopItems = let
     name = "Animdustry";
     exec = "animdustry";
-  in makeDesktopItem {
-    inherit name, exec;
-
     icon = exec;
+  in makeDesktopItem {
+    name = name;
     desktopName = name;
+    icon = icon;
+    exec = exec;
     categories = [ "Game" ];
   };
 
@@ -96,6 +113,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/Anuken/animdustry/releases";
     sourceProvenance = with sourceTypes; [ fromSource ];
     license = licenses.gpl3;
-    platforms = platforms.all;
+    # platforms = platforms.all;
+    maintainers = with maintainers; [];
   };
 }

@@ -3,7 +3,7 @@
     ./minecraft.nix
   ];
 
-  home.packages = with pkgs; [
-    (callPackage ../../../pkgs/animdustry {})
-  ];
+  # home.packages = with pkgs; [
+  #   (callPackage ../../../pkgs/animdustry {})
+  # ];
 }
