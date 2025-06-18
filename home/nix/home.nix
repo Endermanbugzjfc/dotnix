@@ -16,6 +16,7 @@
     ./security.nix
     ./terminal.nix
     ./word-processing.nix
+    ./information.nix
   ];
 
   nixpkgs = {

@@ -5,7 +5,6 @@
     wl-clipboard
     p7zip
     ripgrep
-    neofetch
     colordiff
 
     comma # Runs programs without installing, useful for reading --help.

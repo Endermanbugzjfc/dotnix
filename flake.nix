@@ -43,15 +43,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nvim-config = {
-      url = "github:Endermanbugzjfc/nvim-config";
-      flake = false; # TODO: turn to flake.
-    };
+    # nvim-config = {
+    #   url = "github:Endermanbugzjfc/nvim-config";
+    #   flake = false; # TODO: turn to flake.
+    # };
 
     agenix.url = "github:ryantm/agenix";
   };
 
-  outputs = { self, nixpkgs, home-manager, nvim-config, agenix, ... } @ inputs : let
+  # outputs = { self, nixpkgs, home-manager, nvim-config, agenix, ... } @ inputs : let
+  outputs = { self, nixpkgs, home-manager, agenix, ... } @ inputs : let
     inherit (self) outputs;
 
     flake = {inherit inputs outputs; };

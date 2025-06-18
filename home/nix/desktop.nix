@@ -14,4 +14,13 @@
   programs.waybar = {
     enable = true;
   };
+  services.hypridle = {
+    enable = true;
+  };
+  # services.hyprpaper = {
+  #   enable = true;
+  # };
+  programs.hyprlock = {
+    enable = true;
+  };
 }
