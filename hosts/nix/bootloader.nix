@@ -1,8 +1,9 @@
 {
 # Bootloader.
-  # boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.enable = true;
   boot.loader.grub = {
-    enable = true;
+    #enable = true;
+    enable = false;
     useOSProber = true;
     efiSupport = true;
     fsIdentifier = "label";

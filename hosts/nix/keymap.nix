@@ -2,11 +2,12 @@
 
 {
   services.keyd = {
-    keyboards = {
+    enable = true;
+    keyboards.default = {
       ids = [ "*" ];
       settings.main = {
         capslock = "esc";
-        rightalt = "\"";
+        rightalt = "'";
       };
     };
   };

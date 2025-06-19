@@ -17,6 +17,8 @@
     ./terminal.nix
     ./word-processing.nix
     ./information.nix
+    ./social.nix
+    ./internet.nix
   ];
 
   nixpkgs = {

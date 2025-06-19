@@ -57,7 +57,7 @@
 
     flake = {inherit inputs outputs; };
   in {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations = let nixConfiguration =  nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = flake;
       modules = [
@@ -68,6 +68,9 @@
           home-manager.users."rickastley" = ./home/nix/home.nix;
         }
       ];
+    }; in {
+      #nixos = nixConfiguration;
+      nix = nixConfiguration;
     };
 
     # homeConfigurations = {
