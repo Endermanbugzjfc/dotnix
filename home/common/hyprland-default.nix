@@ -1,23 +1,15 @@
 # The official Hyprland config converted to home-manager definition.
 # https://github.com/hyprwm/Hyprland/blob/main/example/hyprland.conf
 #
-# Apply this config by simply importing it with the nixosConfigurations or
-# homeConfigurations module system, i.e. "imports list" and not `import`
-# keyword!
+# NOTE:
+# This module configures Hyprland without enabling it! Please add this:
+# ```
+# wayland.windowManager.hyprland.enable = true;
+# ```
 #
-# Override this config by assigning values to the same path or override
-# keybindings by manipulating `config.hyprland.bind`.
-# Example:
-# ```
-# # Appending to list:
-# wayland.windowManager.hyprland.settings.env = [ "HI,1" ];
-# # Overriding list:
-# wayland.windowManager.hyprland.settings.env = lib.mkForce [ "HI,1" ];
-# # Overriding keybind:
-# # TODO
-# ```
+# (For more information, see ./default.nix).
 
-lib: {
+{ lib, ... }: {
   wayland.windowManager.hyprland.settings = {
     # This is an example Hyprland config file.
     # Refer to the wiki for more information.
@@ -36,7 +28,7 @@ lib: {
     ################
 
     # See https://wiki.hyprland.org/Configuring/Monitors/
-    monitor=",preferred,auto,auto";
+    monitor= lib.mkDefault ",preferred,auto,auto";
 
 
     ###################
@@ -46,9 +38,9 @@ lib: {
     # See https://wiki.hyprland.org/Configuring/Keywords/
 
     # Set programs that you use
-    "$terminal" = "kitty";
-    "$fileManager" = "dolphin";
-    "$menu" = "wofi --show drun";
+    "\$terminal" = lib.mkDefault "kitty";
+    "\$fileManager" = lib.mkDefault "dolphin";
+    "\$menu" = lib.mkDefault "wofi --show drun";
 
 
     #################
@@ -58,7 +50,7 @@ lib: {
     # Autostart necessary processes (like notifications daemons, status bars, etc.)
     # Or execute your favorite apps at launch like this:
 
-    # exec-once = $terminal
+    # exec-once = \$terminal
     # exec-once = nm-applet &
     # exec-once = waybar & hyprpaper & firefox
 
@@ -100,53 +92,53 @@ lib: {
 
     # https://wiki.hyprland.org/Configuring/Variables/#general
     general = {
-      "gaps_in" = "5";
-      "gaps_out" = "20";
+      "gaps_in" = lib.mkDefault "5";
+      "gaps_out" = lib.mkDefault "20";
 
       "border_size" = "2";
 
       # https://wiki.hyprland.org/Configuring/Variables/#variable-types for info about colors
-      "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
+      "col.active_border" = lib.mkDefault "rgba(33ccffee) rgba(00ff99ee) 45deg";
       "col.inactive_border" = "rgba(595959aa)";
 
       # Set to true enable resizing windows by clicking and dragging on borders and gaps
-      "resize_on_border" = "false";
+      "resize_on_border" = lib.mkDefault "false";
 
       # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
-      "allow_tearing" = "false";
+      "allow_tearing" = lib.mkDefault "false";
 
-      "layout" = "dwindle";
+      "layout" = lib.mkDefault "dwindle";
     };
 
   # https://wiki.hyprland.org/Configuring/Variables/#decoration
   decoration = {
-    "rounding" = "10";
-    "rounding_power" = "2";
+    "rounding" = lib.mkDefault "10";
+    "rounding_power" = lib.mkDefault "2";
 
     # Change transparency of focused and unfocused windows
-    "active_opacity" = "1.0";
-    "inactive_opacity" = "1.0";
+    "active_opacity" = lib.mkDefault "1.0";
+    "inactive_opacity" = lib.mkDefault "1.0";
 
     shadow = {
-        "enabled" = "true";
-        "range" = "4";
-        "render_power" = "3";
-        "color" = "rgba(1a1a1aee)";
+        "enabled" = lib.mkDefault "true";
+        "range" = lib.mkDefault "4";
+        "render_power" = lib.mkDefault "3";
+        "color" = lib.mkDefault "rgba(1a1a1aee)";
     };
 
     # https://wiki.hyprland.org/Configuring/Variables/#blur
     blur = {
-        "enabled" = "true";
-        "size" = "3";
-        "passes" = "1";
+        "enabled" = lib.mkDefault "true";
+        "size" = lib.mkDefault "3";
+        "passes" = lib.mkDefault "1";
 
-        "vibrancy" = "0.1696";
+        "vibrancy" = lib.mkDefault "0.1696";
     };
   };
 
   # https://wiki.hyprland.org/Configuring/Variables/#animations
   animations = {
-    "enabled" = "yes, please :)";
+    "enabled" = lib.mkDefault "yes, please :)";
 
     # Default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
 
@@ -191,22 +183,22 @@ lib: {
   # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
   dwindle = {
     # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-    "pseudotile" = "true";
+    "pseudotile" = lib.mkDefault "true";
     # You probably want this
-    "preserve_split" = "true";
+    "preserve_split" = lib.mkDefault "true";
   };
 
   # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
   master = {
-    "new_status" = "master";
+    "new_status" = lib.mkDefault "master";
   };
 
   # https://wiki.hyprland.org/Configuring/Variables/#misc
   misc = {
     # Set to 0 or 1 to disable the anime mascot wallpapers
-    "force_default_wallpaper" = "-1";
+    "force_default_wallpaper" = lib.mkDefault "-1";
     # If true disables the random hyprland logo / anime girl background. :(
-    "disable_hyprland_logo" = "false";
+    "disable_hyprland_logo" = lib.mkDefault "false";
   };
 
 
@@ -216,32 +208,32 @@ lib: {
 
   # https://wiki.hyprland.org/Configuring/Variables/#input
   input = {
-    "kb_layout" = "us";
-    kb_variant = "";
-    kb_model = "";
-    kb_options = "";
-    kb_rules = "";
+    kb_layout = lib.mkDefault "us";
+    kb_variant = lib.mkDefault "";
+    kb_model = lib.mkDefault "";
+    kb_options = lib.mkDefault "";
+    kb_rules = lib.mkDefault "";
 
-    "follow_mouse" = "1";
+    "follow_mouse" = lib.mkDefault "1";
 
     # -1.0 - 1.0, 0 means no modification.
-    "sensitivity" = "0";
+    "sensitivity" = lib.mkDefault "0";
 
     touchpad = {
-        "natural_scroll" = "false";
+        "natural_scroll" = lib.mkDefault "false";
     };
   };
 
   # https://wiki.hyprland.org/Configuring/Variables/#gestures
   gestures = {
-    "workspace_swipe" = "false";
+    "workspace_swipe" = lib.mkDefault "false";
   };
 
   # Example per-device config
   # See https://wiki.hyprland.org/Configuring/Keywords/#per-device-input-configs for more
   device = {
-    "name" = "epic-mouse-v1";
-    "sensitivity" = "-0.5";
+    "name" = lib.mkDefault "epic-mouse-v1";
+    "sensitivity" = lib.mkDefault "-0.5";
   };
 
 
@@ -251,62 +243,62 @@ lib: {
 
   # See https://wiki.hyprland.org/Configuring/Keywords/
   # Sets "Windows" key as main modifier
-  "$mainMod" = "SUPER";
+  "\$mainMod" = lib.mkDefault "SUPER";
 
   # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
   bind = [
-    "$mainMod, Q, exec, $terminal"
-    "$mainMod, C, killactive,"
-    "$mainMod, M, exit,"
-    "$mainMod, E, exec, $fileManager"
-    "$mainMod, V, togglefloating,"
-    "$mainMod, R, exec, $menu"
-    "$mainMod, P, pseudo," # dwindle
-    "$mainMod, J, togglesplit," # dwindle
+    "\$mainMod, Q, exec, \$terminal"
+    "\$mainMod, C, killactive,"
+    "\$mainMod, M, exit,"
+    "\$mainMod, E, exec, \$fileManager"
+    "\$mainMod, V, togglefloating,"
+    "\$mainMod, R, exec, \$menu"
+    "\$mainMod, P, pseudo," # dwindle
+    "\$mainMod, J, togglesplit," # dwindle
 
     # Move focus with mainMod + arrow keys
-    "$mainMod, left, movefocus, l"
-    "$mainMod, right, movefocus, r"
-    "$mainMod, up, movefocus, u"
-    "$mainMod, down, movefocus, d"
+    "\$mainMod, left, movefocus, l"
+    "\$mainMod, right, movefocus, r"
+    "\$mainMod, up, movefocus, u"
+    "\$mainMod, down, movefocus, d"
 
     # Switch workspaces with mainMod + [0-9]
-    "$mainMod, 1, workspace, 1"
-    "$mainMod, 2, workspace, 2"
-    "$mainMod, 3, workspace, 3"
-    "$mainMod, 4, workspace, 4"
-    "$mainMod, 5, workspace, 5"
-    "$mainMod, 6, workspace, 6"
-    "$mainMod, 7, workspace, 7"
-    "$mainMod, 8, workspace, 8"
-    "$mainMod, 9, workspace, 9"
-    "$mainMod, 0, workspace, 10"
+    "\$mainMod, 1, workspace, 1"
+    "\$mainMod, 2, workspace, 2"
+    "\$mainMod, 3, workspace, 3"
+    "\$mainMod, 4, workspace, 4"
+    "\$mainMod, 5, workspace, 5"
+    "\$mainMod, 6, workspace, 6"
+    "\$mainMod, 7, workspace, 7"
+    "\$mainMod, 8, workspace, 8"
+    "\$mainMod, 9, workspace, 9"
+    "\$mainMod, 0, workspace, 10"
 
     # Move active window to a workspace with mainMod + SHIFT + [0-9]
-    "$mainMod SHIFT, 1, movetoworkspace, 1"
-    "$mainMod SHIFT, 2, movetoworkspace, 2"
-    "$mainMod SHIFT, 3, movetoworkspace, 3"
-    "$mainMod SHIFT, 4, movetoworkspace, 4"
-    "$mainMod SHIFT, 5, movetoworkspace, 5"
-    "$mainMod SHIFT, 6, movetoworkspace, 6"
-    "$mainMod SHIFT, 7, movetoworkspace, 7"
-    "$mainMod SHIFT, 8, movetoworkspace, 8"
-    "$mainMod SHIFT, 9, movetoworkspace, 9"
-    "$mainMod SHIFT, 0, movetoworkspace, 10"
+    "\$mainMod SHIFT, 1, movetoworkspace, 1"
+    "\$mainMod SHIFT, 2, movetoworkspace, 2"
+    "\$mainMod SHIFT, 3, movetoworkspace, 3"
+    "\$mainMod SHIFT, 4, movetoworkspace, 4"
+    "\$mainMod SHIFT, 5, movetoworkspace, 5"
+    "\$mainMod SHIFT, 6, movetoworkspace, 6"
+    "\$mainMod SHIFT, 7, movetoworkspace, 7"
+    "\$mainMod SHIFT, 8, movetoworkspace, 8"
+    "\$mainMod SHIFT, 9, movetoworkspace, 9"
+    "\$mainMod SHIFT, 0, movetoworkspace, 10"
 
     # Example special workspace (scratchpad)
-    "$mainMod, S, togglespecialworkspace, magic"
-    "$mainMod SHIFT, S, movetoworkspace, special:magic"
+    "\$mainMod, S, togglespecialworkspace, magic"
+    "\$mainMod SHIFT, S, movetoworkspace, special:magic"
 
     # Scroll through existing workspaces with mainMod + scroll
-    "$mainMod, mouse_down, workspace, e+1"
-    "$mainMod, mouse_up, workspace, e-1"
+    "\$mainMod, mouse_down, workspace, e+1"
+    "\$mainMod, mouse_up, workspace, e-1"
   ];
 
   bindm = [
     # Move/resize windows with mainMod + LMB/RMB and dragging
-    "$mainMod, mouse:272, movewindow"
-    "$mainMod, mouse:273, resizewindow"
+    "\$mainMod, mouse:272, movewindow"
+    "\$mainMod, mouse:273, resizewindow"
   ];
 
   bindel = [
@@ -335,13 +327,13 @@ lib: {
     # See https://wiki.hyprland.org/Configuring/Workspace-Rules/ for workspace rules
 
     # Example windowrule
-    # windowrule = float,class:^(kitty)$,title:^(kitty)$
+    # windowrule = float,class:^(kitty)\$,title:^(kitty)\$
 
     windowrule = [
       # Ignore maximize requests from apps. You'll probably like this.
       "suppressevent maximize, class:.*"
       # Fix some dragging issues with XWayland
-      "nofocus,class:^$,title:^$,xwayland:1,floating:1,fullscreen:0,pinned:0"
+      "nofocus,class:^\$,title:^\$,xwayland:1,floating:1,fullscreen:0,pinned:0"
     ];
   };
 }

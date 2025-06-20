@@ -6,6 +6,7 @@
     p7zip
     ripgrep
     colordiff
+    stow
 
     comma # Runs programs without installing, useful for reading --help.
   ];

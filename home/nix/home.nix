@@ -26,7 +26,7 @@
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
     };
-  };
+  }; # TODO: make common
 
   home = {
     username = "rickastley";

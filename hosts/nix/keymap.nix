@@ -7,7 +7,7 @@
       ids = [ "*" ];
       settings.main = {
         capslock = "esc";
-        rightalt = "'";
+        rightalt = "'"; # Quotes key broken on my laptop D:
       };
     };
   };

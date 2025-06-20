@@ -1,9 +1,5 @@
 {
   description = ''
-    Notes:
-    - Home-manager not used, dotfiles are managed with GNU Stow
-    - Setup consists of two hosts: Nix, Arch; both have an "rickastley" user.
-
     > An idiot admires complexity, a genius admires simplicity.
     -- Terry A. Davis
 
@@ -56,24 +52,26 @@
     inherit (self) outputs;
 
     flake = {inherit inputs outputs; };
+
+    homeModule = home-manager.nixosModules.home-manager;
+    homeConfig = home-manager.lib.homeManagerConfiguration;
+    nixHome = {
+      home-manager.extraSpecialArgs = flake;
+      home-manager.users."rickastley" = ./home/nix/home.nix;
+    };
   in {
-    nixosConfigurations = let nixConfiguration =  nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nix = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = flake;
       modules = [
         ./hosts/nix
         agenix.nixosModules.default
-        home-manager.nixosModules.home-manager {
-          home-manager.extraSpecialArgs = flake;
-          home-manager.users."rickastley" = ./home/nix/home.nix;
-        }
+        homeModule nixHome
       ];
-    }; in {
-      #nixos = nixConfiguration;
-      nix = nixConfiguration;
     };
 
-    # homeConfigurations = {
+    homeConfigurations = {
+      "rickastley@nix" = homeConfig nixHome;
     #   "rickastley@arch" = home-manager.lib.homeManagerConfiguration {
     #     extraSpecialArgs = flake;
     #     pkgs = nixpkgs.legacyPackages."x86_64-linux";
@@ -81,6 +79,6 @@
     #       ./home/arch/home.nix
     #     ];
     #   };
-    # };
+    };
   };
 }

@@ -1,4 +1,6 @@
 # Enable XWayland, Hyprland and its dependencies.
+# Further configurations can be done via home-manager or within the classic
+# `.config` folder.
 
 { pkgs, lib, ... }: {
   programs.hyprland = {
@@ -17,6 +19,8 @@
 
   environment.sessionVariables = {
     # Hint Electron apps to use Wayland.
+    # List of programs that do not follow this variable:
+    # - Python IDLE
     NIXOS_OZONE_WL = "1";
 
     # If your cursor becomes invisible:

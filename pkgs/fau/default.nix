@@ -14,6 +14,9 @@
     hash = lib.fakeHash;
   };
 
+  # NOTE:
+  # In fau.nimble, "stbimage" should be renamed to "stb_image".
+  #
   lockFile = ./lock.json;
 
   nimFlags = [
@@ -23,6 +26,7 @@
   meta = with lib; {
     description = "Nim game framework";
     homepage = "https://github.com/Anuken/fau";
+    mainProgram = "faupack";
     sourceProvenance = with sourceTypes; [ fromSource ];
     license = licenses.mit;
     platforms = platforms.all;
