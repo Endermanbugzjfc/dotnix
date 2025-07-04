@@ -9,7 +9,10 @@
   environment.systemPackages = with pkgs; [
     activate-linux
     nwg-look
+
     font-awesome
+    nerd-fonts.noto
+    source-han-sans
   ];
 
   # Enable the KDE Plasma Desktop Environment.

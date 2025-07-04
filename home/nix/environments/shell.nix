@@ -1,11 +1,15 @@
-{
+{ pkgs, ... }: {
+  home.packages = with pkgs; [
+    entr # Re-run command when file changes.
+  ];
+
   programs.nushell = {
     enable = true;
     shellAliases = {
       please = "sudo";
       fg = "job unfreeze";
     };
-    loginFile.text = ''
+    configFile.text = ''
       use std/dirs # Replacement for pushd, popd
 
       ln -sf /run/user/1000 ~/Run

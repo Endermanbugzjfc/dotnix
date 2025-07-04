@@ -2,23 +2,22 @@
 # configurations or login. As well as some packages that are too specific
 # (see media.nix and word-processing.)
 
-{ pkgs, lib, ... }: {
+{
   imports = [
     ../common
 
     ./environments
-    ./games
 
     ./vsc.nix
     ./media.nix
     ./editor.nix
     ./desktop.nix
-    ./security.nix
     ./terminal.nix
     ./word-processing.nix
     ./information.nix
     ./social.nix
     ./internet.nix
+    ./management.nix
   ];
 
   nixpkgs = {

@@ -39,10 +39,16 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-index-database = {
+      # https://github.com/nix-community/nix-index-database?tab=readme-ov-file#usage-in-home-manager
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # nvim-config = {
     #   url = "github:Endermanbugzjfc/nvim-config";
     #   flake = false; # TODO: turn to flake.
     # };
+
 
     agenix.url = "github:ryantm/agenix";
   };
