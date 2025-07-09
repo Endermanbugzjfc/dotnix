@@ -1,4 +1,4 @@
-# Desktop environment.
+# Desktop experience.
 
 { pkgs, ... }: {
 
@@ -14,6 +14,15 @@
     nerd-fonts.noto
     source-han-sans
   ];
+  systemd.sleep.extraConfig = ''
+      AllowHybridSleep=no
+      AllowSuspendThenHibernate=yes
+      HibernateDelaySec=${builtins.toString (60*60*1)}
+    ''; # TODO: variable hibnerate delay based on power supply mode.
+  services.logind.extraConfig = ''
+    HandleLidSwitchExternalPower=lock
+    HandleLidSwitchDocked=lock
+  '';
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true; # TODO

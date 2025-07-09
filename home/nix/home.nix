@@ -2,8 +2,10 @@
 # configurations or login. As well as some packages that are too specific
 # (see media.nix and word-processing.)
 
-{
+{ inputs, ... }: {
   imports = [
+    inputs.stylix.homeModules.stylix
+    inputs.agenix.homeManagerModules.default
     ../common
 
     ./environments

@@ -1,6 +1,7 @@
 { inputs, pkgs, lib, ... }: {
   home.packages = with pkgs; [
     brightnessctl
+    home-manager
   ];
 
   imports = [

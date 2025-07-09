@@ -3,6 +3,7 @@
     entr # Re-run command when file changes.
   ];
 
+  home.shell.enableNushellIntegration = true;
   programs.nushell = {
     enable = true;
     shellAliases = {
