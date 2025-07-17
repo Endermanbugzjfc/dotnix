@@ -12,6 +12,7 @@
     };
     configFile.text = ''
       use std/dirs # Replacement for pushd, popd
+      use std/dirs shells-aliases *
 
       ln -sf /run/user/1000 ~/Run
     '';
@@ -25,4 +26,5 @@
     enable = true;
     enableNushellIntegration = true;
   };
+  programs.jq.enable = true;
 }

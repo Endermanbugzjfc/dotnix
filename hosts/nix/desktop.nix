@@ -20,9 +20,9 @@
       HibernateDelaySec=${builtins.toString (60*60*1)}
     ''; # TODO: variable hibnerate delay based on power supply mode.
   services.logind.extraConfig = ''
-    HandleLidSwitchExternalPower=lock
-    HandleLidSwitchDocked=lock
-  '';
+    HandleLidSwitchExternalPower=ignoe
+    HandleLidSwitchDocked=ignore
+  ''; # TODO: make service to turn off screen or do  fa  NCy ASITUFF
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true; # TODO

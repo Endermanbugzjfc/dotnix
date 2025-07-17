@@ -44,7 +44,7 @@ in {
     };
     device = lib.mkForce [{
       "name" = lib.mkDefault "elan0524:01-04f3:3215-touchpad";
-      "sensitivity" =  "1.4";
+      "sensitivity" =  "1.5";
     }];
 
     # l -> locked, will also work when an input inhibitor (e.g. a lockscreen) is active.
@@ -459,7 +459,7 @@ in {
   };
 
   stylix = {
-    enable = true;
+    # enable = true;
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/ic-orange-ppl.yaml";
     base16Scheme = "${pkgs.base16-schemes}/share/themes/blueforest.yaml";
   };
