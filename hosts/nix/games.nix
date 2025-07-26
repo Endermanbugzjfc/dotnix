@@ -4,4 +4,6 @@
     mindustry
     mindustry-wayland
   ];
+
+  programs.steam.enable = true;
 }

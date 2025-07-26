@@ -9,8 +9,9 @@
     ./security.nix
     ./desktop.nix
     ./bootloader.nix
-    ./cross-platform.nix
+    ./compatibility.nix
     ./information.nix
     ./games.nix
+    ./debug.nix
   ];
 }

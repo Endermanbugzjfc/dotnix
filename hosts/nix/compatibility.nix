@@ -3,4 +3,6 @@
     wine-wayland
     winetricks
   ];
+
+  virtualisation.docker.enable = true;
 }

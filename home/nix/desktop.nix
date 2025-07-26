@@ -44,7 +44,7 @@ in {
     };
     device = lib.mkForce [{
       "name" = lib.mkDefault "elan0524:01-04f3:3215-touchpad";
-      "sensitivity" =  "1.5";
+      "sensitivity" =  "1.6";
     }];
 
     # l -> locked, will also work when an input inhibitor (e.g. a lockscreen) is active.
