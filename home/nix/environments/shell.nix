@@ -3,7 +3,10 @@
     entr # Re-run command when file changes.
   ];
 
-  home.shell.enableNushellIntegration = true;
+  home.shell = {
+    enableNushellIntegration = true;
+    enableBashIntegration = true;
+  };
   programs.nushell = {
     enable = true;
     shellAliases = {
@@ -20,6 +23,7 @@
   programs.bat.enable = true;
   programs.yazi = {
     enable = true;
+    enableBashIntegration = true;
     enableNushellIntegration = true;
   };
   programs.starship = {

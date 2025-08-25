@@ -25,6 +25,7 @@ in {
   wayland.windowManager.hyprland.settings = {
     inherit monitor;
     misc.disable_hyprland_logo = "true"; # Brought my own anime girl.
+    general.gaps_out = "10";
 
     # Fix apps that do not follow NIXOS_OZONE_WL:
     # https://www.reddit.com/r/hyprland/comments/194rk1o/comment/khi0k17/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
@@ -38,13 +39,13 @@ in {
     input.touchpad = {
       natural_scroll = "true";
       disable_while_typing = "true";
-      scroll_factor = "0.3"; # TODO
+      scroll_factor = "0.1"; # TODO
       clickfinger_behavior = "1"; # Two fingers to right click.
-      # drag_3fg = "1";
+      drag_3fg = "1";
     };
     device = lib.mkForce [{
       "name" = lib.mkDefault "elan0524:01-04f3:3215-touchpad";
-      "sensitivity" =  "1.6";
+      "sensitivity" =  "1.67";
     }];
 
     # l -> locked, will also work when an input inhibitor (e.g. a lockscreen) is active.

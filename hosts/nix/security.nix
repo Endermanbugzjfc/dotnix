@@ -1,13 +1,16 @@
-{ pkgs, ...}: {
+{ inputs, pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     keybase-gui
-    agenix-cli
+    inputs.agenix.packages.x86_64-linux.default
+    openssl
   ];
 
   lazy-services = [
     "keybase"
     "kbfs"
   ];
+
+  programs.gnupg.agent.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are started in user sessions. programs.mtr.enable = true;
 }
