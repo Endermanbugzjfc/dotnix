@@ -18,6 +18,8 @@ in {
       fi
       exec $PREP
     '')
+
+    hyprpicker
   ];
 
   wayland.windowManager.hyprland.enable = true;
@@ -62,9 +64,7 @@ in {
     # d -> has description, will allow you to write a description for your bind.
     # p -> bypasses the app's requests to inhibit keybinds.
 
-
     bind = [
-      # Copied from Arch.
       "\$mainMod ALT, h, movefocus, l"
       "\$mainMod ALT, l, movefocus, r"
       "\$mainMod ALT, k, movefocus, u"
@@ -77,9 +77,15 @@ in {
 
       "\$mainMod ALT, up, exec, hyprland-toggle-upside-down"
       "\$mainMod, l, exec, hyprlock"
+
+      "\$mainMod SHIFT, c, exec, hyprpicker | wl-copy"
+      ", Print, exec, grim - | wl-copy"
+      "SHIFT, Print, exec, grim -g \"$(slurp)\" - | wl-copy"
     ];
 
+    # TODO: convert all hardcoded commands to nixpkgs dependency.
     # TODO: lower voice = stay mute, higher = auto unmute, step 10. Hold = step 2.
+    # TODO: move to home manager keymap.nix
   };
 
   programs.eww = {
