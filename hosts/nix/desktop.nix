@@ -19,10 +19,11 @@
       AllowSuspendThenHibernate=yes
       HibernateDelaySec=${builtins.toString (60*60*1)}
     ''; # TODO: variable hibnerate delay based on power supply mode.
-  services.logind.extraConfig = ''
-    HandleLidSwitchExternalPower=ignoe
-    HandleLidSwitchDocked=ignore
-  ''; # TODO: make service to turn off screen or do  fa  NCy ASITUFF
+  services.logind.settings.Login = {
+    HandleLidSwitch = "sleep";
+    HandleLidSwitchExternalPower = "ignore";
+    HandleLidSwitchDocked = "ignore";
+  }; # TODO: make service to turn off screen or do  fa  NCy ASITUFF
 
   # Enable the KDE Plasma Desktop Environment.
   services.desktopManager.plasma6.enable = true;

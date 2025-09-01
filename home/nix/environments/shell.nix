@@ -12,6 +12,7 @@
     shellAliases = {
       please = "sudo";
       fg = "job unfreeze";
+      f = "job list";
     };
     configFile.text = ''
       use std/dirs # Replacement for pushd, popd
@@ -28,7 +29,13 @@
   };
   programs.starship = {
     enable = true;
+    enableBashIntegration = true;
     enableNushellIntegration = true;
   };
   programs.jq.enable = true;
+  programs.zoxide = {
+    enable = true;
+    enableBashIntegration = true;
+    enableNushellIntegration = true;
+  };
 }
