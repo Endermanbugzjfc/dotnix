@@ -64,7 +64,9 @@ in {
     # d -> has description, will allow you to write a description for your bind.
     # p -> bypasses the app's requests to inhibit keybinds.
 
-    bind = [
+    bind = let
+      selectAndShoot = "exec, grim -g \"$(slurp)\" - | wl-copy";
+    in [
       "\$mainMod ALT, h, movefocus, l"
       "\$mainMod ALT, l, movefocus, r"
       "\$mainMod ALT, k, movefocus, u"
@@ -80,7 +82,8 @@ in {
 
       "\$mainMod SHIFT, c, exec, hyprpicker | wl-copy"
       ", Print, exec, grim - | wl-copy"
-      "SHIFT, Print, exec, grim -g \"$(slurp)\" - | wl-copy"
+      "\$mainMod SHIFT, s, ${selectAndShoot}" # For laptop built-in key.
+      "SHIFT, Print, ${selectAndShoot}"
     ];
 
     # TODO: convert all hardcoded commands to nixpkgs dependency.
@@ -90,6 +93,7 @@ in {
 
   programs.eww = {
     enable = true;
+    enableBashIntegration = true;
   };
   programs.wofi = {
     enable = true;

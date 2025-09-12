@@ -13,12 +13,12 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
+  # root and nix store:
+  boot.initrd.luks.devices."luks-5de558fd-2f7c-4c6b-8ec1-400897cdb0e5".device = "/dev/disk/by-uuid/5de558fd-2f7c-4c6b-8ec1-400897cdb0e5";
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/0cabbb22-9054-4d56-8bbe-93497858d879";
       fsType = "ext4";
     };
-
-  boot.initrd.luks.devices."luks-5de558fd-2f7c-4c6b-8ec1-400897cdb0e5".device = "/dev/disk/by-uuid/5de558fd-2f7c-4c6b-8ec1-400897cdb0e5";
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/BEF0-53D9";
@@ -26,8 +26,14 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
+  # swap:
+  boot.initrd.luks.devices."luks-e66afa16-555b-445d-a498-9b58f1b3c04e".device = "/dev/disk/by-uuid/e66afa16-555b-445d-a498-9b58f1b3c04e";
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/6afe82f3-8b75-4600-bd1a-df51fd7898cf"; }
+    [
+      {
+        device = "/dev/disk/by-uuid/6afe82f3-8b75-4600-bd1a-df51fd7898cf";
+        # randomEncryption.enable = true;
+      }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

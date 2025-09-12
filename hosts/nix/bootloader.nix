@@ -19,5 +19,22 @@
   # };
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.initrd.luks.devices."luks-e66afa16-555b-445d-a498-9b58f1b3c04e".device = "/dev/disk/by-uuid/e66afa16-555b-445d-a498-9b58f1b3c04e";
+
+  # boot.kernelParams = ["resume_offset=<offset>"];
+#
+# # https://nixos.wiki/wiki/Hibernation
+#
+  boot.resumeDevice = "/dev/disk/by-uuid/0cabbb22-9054-4d56-8bbe-93497858d879"; # root parition
+
+  powerManagement.enable = true;
+
+
+  # already has swap device at hardware-configuration
+
+  # swapDevices = [
+  # {
+  #   device = "/var/lib/swapfile";
+  #   size = 17 * 1024; # 17GB in MB
+  # }
+  # ];
 }

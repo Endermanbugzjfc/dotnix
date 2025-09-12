@@ -1,6 +1,7 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     entr # Re-run command when file changes.
+    nushell
   ];
 
   home.shell = {
@@ -19,6 +20,16 @@
       use std/dirs shells-aliases *
 
       ln -sf /run/user/1000 ~/Run
+
+      def --env y [...args] {
+	      let tmp = (mktemp -t "yazi-cwd.XXXXXX")
+	      yazi ...$args --cwd-file $tmp
+	      let cwd = (open $tmp)
+	      if $cwd != "" and $cwd != $env.PWD {
+	      	cd $cwd
+	      }
+	      rm -fp $tmp
+      }
     '';
   };
   programs.bat.enable = true;
@@ -38,4 +49,7 @@
     enableBashIntegration = true;
     enableNushellIntegration = true;
   };
+
+  programs.direnv.enable = true;
+  programs.nix-direnv.enable = true;
 }
