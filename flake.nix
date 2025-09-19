@@ -1,8 +1,5 @@
 {
   description = ''
-    > An idiot admires complexity, a genius admires simplicity.
-    -- Terry A. Davis
-
     https://github.com/Endermanbugzjfc/dotnix
 
     This is free and unencumbered software released into the public domain.
