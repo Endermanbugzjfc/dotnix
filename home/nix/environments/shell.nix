@@ -1,7 +1,7 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     entr # Re-run command when file changes.
-    nushell
+    # nushell
   ];
 
   home.shell = {
@@ -20,6 +20,9 @@
       use std/dirs shells-aliases *
 
       ln -sf /run/user/1000 ~/Run
+      # let chrome_open = "~/Run/feat/chrome-open"
+      # mkdir $chrome_open
+      # job spawn { job spawn { glob $"($chrome_open)/*" | str join "\n" | entr -r "google-chrome-stable " } }
 
       def --env y [...args] {
 	      let tmp = (mktemp -t "yazi-cwd.XXXXXX")
@@ -51,5 +54,5 @@
   };
 
   programs.direnv.enable = true;
-  programs.nix-direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 }

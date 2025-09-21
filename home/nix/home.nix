@@ -26,6 +26,9 @@
     config = {
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
+      permittedInsecurePackages = [
+        "libsoup-2.74.3" # ./word-processing.nix: pkgs.citrix_workspace
+      ];
     };
   }; # TODO: make common
 

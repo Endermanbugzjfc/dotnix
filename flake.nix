@@ -52,6 +52,8 @@
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
   };
 
   # outputs = { self, nixpkgs, home-manager, nvim-config, agenix, ... } @ inputs : let

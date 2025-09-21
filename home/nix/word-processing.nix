@@ -7,6 +7,8 @@
 
     wpsoffice
     xournalpp
+
+    citrix_workspace
   ];
 
   programs.onlyoffice.enable = true;
