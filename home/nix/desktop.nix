@@ -85,7 +85,7 @@ in {
       "\$mainMod ALT, up, exec, hyprland-toggle-upside-down"
       "\$mainMod, l, exec, hyprlock"
 
-      "\$mainMod SHIFT, c, exec, hyprpicker | grep -oE \"(#.+)\" | wl-copy"
+      "\$mainMod SHIFT, c, exec, hyprpicker | grep -oE \"##(.+)\" | tr -d \"[:space:]\" | wl-copy"
       ", Print, exec, grim - | wl-copy"
       "\$mainMod SHIFT, S, ${selectAndShoot}" # For laptop built-in key. TODO
       # "\$mainMod, Print, ${selectAndShoot}"

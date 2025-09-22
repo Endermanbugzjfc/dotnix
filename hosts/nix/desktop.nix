@@ -1,6 +1,6 @@
 # Desktop experience.
 
-{ pkgs, ... }: {
+{ pkgs, inputs, ... }: {
 
   imports = [
     ../common/features/enable-hyprland.nix
@@ -9,10 +9,12 @@
   environment.systemPackages = with pkgs; [
     activate-linux
     nwg-look
-
+  ];
+  fonts.packages = with pkgs; [
     font-awesome
     nerd-fonts.noto
     source-han-sans
+    inputs.mindustrice.packages.x86_64-linux.mindustry-fonts # TODO: test
   ];
   systemd.sleep.extraConfig = ''
       AllowHybridSleep=no

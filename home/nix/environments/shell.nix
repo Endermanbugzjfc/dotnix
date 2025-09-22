@@ -14,15 +14,13 @@
       please = "sudo";
       fg = "job unfreeze";
       f = "job list";
+      e = "enter";
     };
     configFile.text = ''
       use std/dirs # Replacement for pushd, popd
       use std/dirs shells-aliases *
 
       ln -sf /run/user/1000 ~/Run
-      # let chrome_open = "~/Run/feat/chrome-open"
-      # mkdir $chrome_open
-      # job spawn { job spawn { glob $"($chrome_open)/*" | str join "\n" | entr -r "google-chrome-stable " } }
 
       def --env y [...args] {
 	      let tmp = (mktemp -t "yazi-cwd.XXXXXX")
@@ -34,6 +32,9 @@
 	      rm -fp $tmp
       }
     '';
+      # let chrome_open = "~/Run/feat/chrome-open"
+      # mkdir $chrome_open
+      # job spawn { job spawn { glob $"($chrome_open)/*" | str join "\n" | entr -r "google-chrome-stable " } }
   };
   programs.bat.enable = true;
   programs.yazi = {

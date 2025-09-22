@@ -41,10 +41,6 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nvim-config = {
-    #   url = "github:Endermanbugzjfc/nvim-config";
-    #   flake = false; # TODO: turn to flake.
-    # };
 
     agenix.url = "github:ryantm/agenix";
 
@@ -54,9 +50,10 @@
     };
 
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
+
+    mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
   };
 
-  # outputs = { self, nixpkgs, home-manager, nvim-config, agenix, ... } @ inputs : let
   outputs = { self, nixpkgs, home-manager, agenix, stylix, ... } @ inputs : let
     inherit (self) outputs;
 
