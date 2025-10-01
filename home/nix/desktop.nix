@@ -2,8 +2,6 @@
   monitor = ",preferred,auto,1.2";
 in {
   home.packages = with pkgs; [
-    kando # Pie menu.
-
     grim  # Screenshot.
     slurp # Screen region selection.
 
@@ -20,10 +18,12 @@ in {
     '')
 
     hyprpicker
+    waypaper
 
     hyprland-qt-support
     inputs.hyprqt6engine.packages.x86_64-linux.default
 
+    vlc
     wlvncc
   ];
 
@@ -45,8 +45,8 @@ in {
     input.accel_profile = "flat";
     input.touchpad = {
       natural_scroll = "true";
-      disable_while_typing = "true";
-      scroll_factor = "0.1"; # TODO
+      disable_while_typing = "true"; # Doesn't seem to work(?
+      scroll_factor = "0.1";
       clickfinger_behavior = "1"; # Two fingers to right click.
       drag_3fg = "1";
     };
@@ -54,6 +54,10 @@ in {
       "name" = lib.mkDefault "elan0524:01-04f3:3215-touchpad";
       "sensitivity" =  "1.67";
     }];
+
+    misc.middle_click_paste = "false";
+
+    # TODO: run nix flake update on idle or lock
 
     # l -> locked, will also work when an input inhibitor (e.g. a lockscreen) is active.
     # r -> release, will trigger on release of a key.
@@ -88,7 +92,11 @@ in {
       "\$mainMod SHIFT, c, exec, hyprpicker | grep -oE \"##(.+)\" | tr -d \"[:space:]\" | wl-copy"
       ", Print, exec, grim - | wl-copy"
       "\$mainMod SHIFT, S, ${selectAndShoot}" # For laptop built-in key. TODO
-      # "\$mainMod, Print, ${selectAndShoot}"
+      "\$mainMod, Print, ${selectAndShoot}"
+    ];
+
+    bindm = [
+      "\$mainMod ALT, mouse:272, resizewindow"
     ];
 
     # TODO: convert all hardcoded commands to nixpkgs dependency.
@@ -122,16 +130,16 @@ in {
       }];
     };
   };
-  # services.hyprpaper = {
-  #   enable = true;
-  # };
+  services.swww = {
+    enable = true;
+  };
   programs.hyprlock = {
     enable = true;
   };
 
   stylix = {
-    # enable = true;
+    enable = false;
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/ic-orange-ppl.yaml";
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/blueforest.yaml";
+    # base16Scheme = "${pkgs.base16-schemes}/share/themes/blueforest.yaml";
   };
 }
