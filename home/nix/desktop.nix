@@ -32,6 +32,7 @@ in {
   wayland.windowManager.hyprland.settings = {
     inherit monitor;
     misc.disable_hyprland_logo = "true"; # Brought my own anime girl.
+    exec-once = "waypaper --random &";
     general.gaps_out = "0";
 
     # Fix apps that do not follow NIXOS_OZONE_WL:

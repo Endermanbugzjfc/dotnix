@@ -22,6 +22,8 @@
       HibernateDelaySec=${builtins.toString (60*60*1)}
     ''; # TODO: variable hibnerate delay based on power supply mode.
   services.logind.settings.Login = {
+    RuntimeDirectorySize = "14G"; # TODO: move to fs module
+
     HandleLidSwitch = "sleep";
     HandleLidSwitchExternalPower = "ignore";
     HandleLidSwitchDocked = "ignore";
