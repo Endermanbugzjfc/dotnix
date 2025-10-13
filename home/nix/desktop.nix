@@ -46,7 +46,7 @@ in {
     input.accel_profile = "flat";
     input.touchpad = {
       natural_scroll = "true";
-      disable_while_typing = "true"; # Doesn't seem to work(?
+      disable_while_typing = "true";
       scroll_factor = "0.1";
       clickfinger_behavior = "1"; # Two fingers to right click.
       drag_3fg = "1";
