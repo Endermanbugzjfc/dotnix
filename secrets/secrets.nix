@@ -1,0 +1,8 @@
+let
+  rickastley = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC081E/z8J2Dn6UUqd2doz3qarVyHyUFJCQ680jMlDWyIZLchaVXKhM5Z1kPN83BHoPaizwsacObWF/5WJJ5TT5KYV+QQmZjmq0P3GbcOaC4O/hMd8LgxutwilauHZ3GnAKfn/3TY13e5TPgulc7e3lrtXhnMjhzHs6WgZ7X5R9mgxqVd9OnTXBM53PCB+7EDxQI8XnuESF2w0BfzOWc+rAL3SakIls+UvVEOE7j2xSvXBhhxofL2r/5FYKYh0IZH87udWj205WSGBVOnQKIXOWzmMdk1FFpAJGur8W32HiOpCBi1GmgrZG6Dy8Bj//1unsnBa4wF/+VDDlT+cY++ZAnu+NpcLufV6VJtVEViEt6EW4DH3vHedyfWfS37bPpOUmuh9Fy289bo8cMnn1PPZAS8Htez/wohUTJO6NyyFB2HYww760/ymx1ZL0biJsCR9fERMV5zW5vz7fy0l9FOvzZSU2ZWV/Wwe0Rw6UAydOx+gvJIMIjjhOCcnTFg6J9nM= user@LAPTOP-O2TSBQ0A";
+  keys = [
+    rickastley
+  ];
+in {
+  "Ezjfc_private.pgp.age".publicKeys = keys;
+}
