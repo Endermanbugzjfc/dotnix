@@ -1,0 +1,6 @@
+# Ignore build outputs from performing `nix-build` or `nix build`
+result
+result-*
+
+# Ignore automatically generated output by nix-direnv
+.direnv
