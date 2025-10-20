@@ -1,31 +1,14 @@
 {
   description = ''
-    https://github.com/Endermanbugzjfc/dotnix
+    https://github.com/Endermanbugzjfc/dotnix | Unlicense
 
-    This is free and unencumbered software released into the public domain.
+    NixOS / Nix package manager configurations for my personal environments,
+    including laptop, desktop and VPS.
+    For briefs regarding each environment, see hosts/README.md.
 
-    Anyone is free to copy, modify, publish, use, compile, sell, or
-    distribute this software, either in source code form or as a compiled
-    binary, for any purpose, commercial or non-commercial, and by any
-    means.
-
-    In jurisdictions that recognize copyright laws, the author or authors
-    of this software dedicate any and all copyright interest in the
-    software to the public domain. We make this dedication for the benefit
-    of the public at large and to the detriment of our heirs and
-    successors. We intend this dedication to be an overt act of
-    relinquishment in perpetuity of all present and future rights to this
-    software under copyright law.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-    IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-    OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-    ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-    OTHER DEALINGS IN THE SOFTWARE.
-
-    For more information, please refer to <http://unlicense.org/>
+    Other flakes in this repository:
+    - ./utils/flake.nix
+    - ./wallpapers/flake.nix
   '';
 
   inputs = {
@@ -37,46 +20,36 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-index-database = {
-      # https://github.com/nix-community/nix-index-database?tab=readme-ov-file#usage-in-home-manager
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    agenix.url = "github:ryantm/agenix";
-
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.darwin.follows = "";
+    };
     stylix = {
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    utilities.url = ./utils;
 
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
-
     mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, stylix, ... } @ inputs : let
-    inherit (self) outputs;
-
-    flake = {inherit inputs outputs; };
-
-    homeModule = home-manager.nixosModules.home-manager;
-    homeConfig = home-manager.lib.homeManagerConfiguration;
-    nixHome.home-manager = {
-      extraSpecialArgs = flake;
-      users.rickastley = ./home/nix/home.nix;
-    };
-    agenixModule = agenix.nixosModules.default;
-    stylixModule = stylix.nixosModules.stylix;
+  outputs = { self, nixpkgs, home-manager, utilities, ... } @ inputs : let
+    # agenixModule = agenix.nixosModules.default;
+    # stylixModule = stylix.nixosModules.stylix;
   in {
-    nixosConfigurations.nix = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nix = let
       system = "x86_64-linux";
-      specialArgs = flake;
+    in nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = { inherit system inputs; };
       modules = [
-        ./hosts/nix
-        homeModule # TODO: move to home.nix
-        nixHome # TODO: partially move to home.nix
-        agenixModule # TODO: move to security.nix
-        stylixModule # TODO: move to desktop.nix
+        # ./hosts/nix/configuration.nix
+        ./hosts/nix/dev.nix
       ];
     };
 
