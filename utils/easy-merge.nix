@@ -26,19 +26,34 @@
 final: prev: let
   lib = prev;
 in {
-  easyMerge = label: { imports ? [], options ? [], ... } @ module: let
-    sections = [ "imports" "options" "config" ];
-    sectionsToMerge = lib.zipAttrsWithNames sections (_: value: {
-      imports = value.imports or [];
-      options = value.options or [];
-      config = (value.config or []) ++ (builtins.removeAttrs value sections);
-    }) module.${label};
-  in {
-    # imports = lib.mkMerge (imports ++ sectionsToMerge.imports);
-    # options = lib.mkMerge (options ++ sectionsToMerge.options);
-    config = lib.mkMerge ((module.config or []) ++ [
-      (builtins.removeAttrs module (sections ++ [ label ]))
-    ]);
-  };
+  easyMerge = label: module: let
+    # nopWrap ensures lib.zipAttrs give correct outputs:
+    nopWrap = {
+      imports = [];
+      options = {};
+      config = {};
+    };
+    # wrap is for top level and wrap' is for namespaces, but I want to keep the
+    # variable names short:
+    wrap = extraRemove: parent: let
+      parent' = nopWrap // parent; # Reduce "null-coalescings".
+    in {
+      imports = parent'.imports;
+      options = parent'.options;
+      config = lib.mergeAttrs parent'.config (builtins.removeAttrs parent' ([
+        "imports" "options" "config"
+      ] ++ extraRemove));
+    };
+    wrap' = wrap [];
 
+    topLevel = wrap [ label ] module;
+    namespaces = lib.getValues (lib.attrsToList module.${label}) ++ [ nopWrap ];
+    # zipped should always be { imports = [...]; options = [...]; config = [...]; }:
+    zipped = lib.zipAttrs (builtins.map wrap' namespaces);
+  in {
+    imports = builtins.concatLists (topLevel.imports ++ zipped.imports);
+    # Options do not support lib.mkMerge:
+    options = lib.mergeAttrsList ([ topLevel.options ] ++ zipped.options);
+    config = lib.mkMerge ([ topLevel.config ] ++ zipped.config);
+  };
 }
