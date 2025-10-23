@@ -34,7 +34,7 @@ in {
   */
   warnDupe = names: warn: let
     # https://discourse.nixos.org/t/list-compare-diff-or-substraction/62367/4
-    dupes = with lib; attrNames (filterAttrs (_: v: v > 1) (groupBy' (x: _: x+1) 0 builtins.toString names));
+    dupes = with lib; attrNames (filterAttrs (_: v: v > 1) (groupBy' (x: _: x+1) 0 builtins.toJSON names));
     warn' = "${warn}: ${lib.concatStringsSep ", " dupes}";
   in lib.warnIf (dupes != []) warn' names;
 }

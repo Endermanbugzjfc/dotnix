@@ -30,7 +30,11 @@ final: prev: let
   lib = final;
 in {
   enableMultiWith = config: names: let
-    config' = config // { enable = true; };
+    config' = lib.warnIf (
+      config ? enable
+    ) "enable-multi-with will override the attr `enable`: ${builtins.toJSON config.enable}" (
+      config // { enable = true; }
+    );
     filtered = builtins.filter (name: name != "" && name != []) (builtins.split "[[:space:]]" names);
     enabled = with lib; genAttrs (warnDupe filtered "enable-multi has duplicated names") (_: config');
   in enabled;
