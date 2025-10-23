@@ -438,7 +438,7 @@
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_3",
         "stylix": "stylix",
-        "utilities": "utilities"
+        "utils": "utils"
       }
     },
     "stylix": {
@@ -601,7 +601,7 @@
         "type": "github"
       }
     },
-    "utilities": {
+    "utils": {
       "locked": {
         "path": "utils",
         "type": "path"

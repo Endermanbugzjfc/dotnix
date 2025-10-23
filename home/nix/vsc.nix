@@ -1,11 +1,6 @@
 # Git, GitHub, Sublime Merge...
 
 { pkgs, ... }: {
-  home.packages = with pkgs; [
-    sublime-merge
-  ];
-
-  programs.gh.enable = true;
 
   programs.git = {
     enable = true;
@@ -16,6 +11,4 @@
       commit.gpgsign = true;
     };
   };
-
-  programs.lazygit.enable = true;
 }

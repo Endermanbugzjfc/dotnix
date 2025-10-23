@@ -8,6 +8,7 @@
 
     Other flakes in this repository:
     - ./utils/flake.nix
+    - ./utils/tests/flake.nix
     - ./wallpapers/flake.nix
   '';
 
@@ -32,21 +33,24 @@
       url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    utilities.url = ./utils;
+    utils.url = ./utils;
 
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
     mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
   };
 
-  outputs = { self, nixpkgs, home-manager, utilities, ... } @ inputs : let
+  outputs = { self, nixpkgs, home-manager, utils, ... } @ inputs : let
     # agenixModule = agenix.nixosModules.default;
     # stylixModule = stylix.nixosModules.stylix;
+    lib' = with nixpkgs.lib; extend(composeManyExtensions (with utils.overlays; [
+      easy-merge mk-list enable-multi
+    ]));
   in {
     nixosConfigurations.nix = let
       system = "x86_64-linux";
     in nixpkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = { inherit system inputs; };
+      specialArgs = { inherit lib' inputs system; };
       modules = [
         # ./hosts/nix/configuration.nix
         ./hosts/nix/dev.nix

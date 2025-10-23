@@ -22,30 +22,4 @@
     ./management.nix
   ];
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = (_: true);
-      permittedInsecurePackages = [
-        "libsoup-2.74.3" # ./word-processing.nix: pkgs.citrix_workspace
-      ];
-    };
-  }; # TODO: make common
-
-  home = {
-    username = "rickastley";
-    homeDirectory = "/home/rickastley";
-    stateVersion = "25.05";
-
-    # packages = with pkgs; [
-#       # wl-clip-persistent
-#       neofetch
-#
-#         google-chrome
-#
-#         gcc
-#         cargo
-# # https://nixos.wiki/wiki/Python
-    # ];
-  };
 }

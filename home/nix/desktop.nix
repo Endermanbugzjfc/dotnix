@@ -5,26 +5,12 @@ in {
     grim  # Screenshot.
     slurp # Screen region selection.
 
-    (writeShellScriptBin "hyprland-toggle-upside-down" ''
-      #!/usr/bin/env bash
-      # Turn screen upside down:
-      # https://www.reddit.com/r/hyprland/comments/114rlm4/hyprctl_command_for_screen_rotation/
-      [[ $DESKTOP_SESSION != "hyprland" ]] && exit 1
-      PREP='hyprctl keyword monitor ${monitor}'
-      if hyprctl monitors | grep -q 'transform: 0'; then
-        PREP+=',transform,2'
-      fi
-      exec $PREP
-    '')
-
     hyprpicker
     waypaper
 
     hyprland-qt-support
     inputs.hyprqt6engine.packages.x86_64-linux.default
 
-    vlc
-    wlvncc
   ];
 
   wayland.windowManager.hyprland.enable = true;
