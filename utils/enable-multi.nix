@@ -25,14 +25,15 @@
 # '';
 # ```
 
-final: prev: {
+final: prev: let
+  inherit (import ./warn-dupe.nix final prev) warnDupe;
+  lib = final;
+in {
   enableMultiWith = config: names: let
+    config' = config // { enable = true; };
     filtered = builtins.filter (name: name != "" && name != []) (builtins.split "[[:space:]]" names);
-    enabled = builtins.listToAttrs (builtins.map (name: {
-      # name should always be string.
-      inherit name;
-      value = config // { enable = true; };
-    }) filtered);
+    enabled = with lib; genAttrs (warnDupe filtered "enable-multi has duplicated names") (_: config');
   in enabled;
-  enableMulti = final.enableMultiWith {};
+  enableMulti = lib.enableMultiWith {};
 }
+
