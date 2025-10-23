@@ -27,6 +27,7 @@
 
 final: prev: let
   inherit (import ./warn-dupe.nix final prev) warnDupe;
+  inherit (import ./mk-list.nix final prev) mkList;
   lib = final;
 in {
   enableMultiWith = config: names: let
@@ -35,8 +36,7 @@ in {
     ) "enable-multi-with will override the attr `enable`: ${builtins.toJSON config.enable}" (
       config // { enable = true; }
     );
-    filtered = builtins.filter (name: name != "" && name != []) (builtins.split "[[:space:]]" names);
-    enabled = with lib; genAttrs (warnDupe filtered "enable-multi has duplicated names") (_: config');
+    enabled = with lib; genAttrs (warnDupe (mkList names) "enable-multi has duplicated names") (_: config');
   in enabled;
   enableMulti = lib.enableMultiWith {};
 }

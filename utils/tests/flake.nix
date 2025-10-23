@@ -64,7 +64,7 @@
           ]);
         };
       in lib.genAttrs [
-        "warn-dupe" "enable-multi"
+        "warn-dupe" "mk-list" "enable-multi"
       ] mkTest;
     };
   };

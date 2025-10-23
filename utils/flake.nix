@@ -15,6 +15,7 @@
 
   outputs = { self }: {
     overlays.easy-merge = import ./easy-merge.nix;
+    overlays.mk-list = import ./mk-list.nix;
     overlays.enable-multi = import ./enable-multi.nix;
     overlays.warn-dupe = import ./warn-dupe.nix;
     nixosModules.lazy-services = ./lazy-services.nix;
