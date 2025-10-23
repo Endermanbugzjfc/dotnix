@@ -440,6 +440,22 @@
         "type": "github"
       }
     },
+    "nixsys": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1761056677,
+        "narHash": "sha256-VWpGpVEqTm/MIXdJ73n2u0DurRXIoVLUXPKxy6Zf544=",
+        "owner": "the-argus",
+        "repo": "nixsys",
+        "rev": "7b88bc2402ce85c2d7065505d7e95562ca9b31f0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "the-argus",
+        "repo": "nixsys",
+        "type": "github"
+      }
+    },
     "nur": {
       "inputs": {
         "flake-parts": [
@@ -473,6 +489,7 @@
         "mindustrice": "mindustrice",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_4",
+        "nixsys": "nixsys",
         "stylix": "stylix"
       }
     },

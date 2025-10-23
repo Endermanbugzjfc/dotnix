@@ -4,6 +4,7 @@
 
   imports = [
     ../common/features/enable-hyprland.nix
+    "${inputs.nixsys}/modules/emptty.nix"
   ];
 
   environment.systemPackages = with pkgs; [
@@ -32,7 +33,7 @@
   # Enable the KDE Plasma Desktop Environment.
   services.desktopManager.plasma6.enable = true;
   services.displayManager.sddm = {
-    enable = true;
+    enable = false;
     settings = {
       General = {
         DefaultSession = "hyprland.desktop";
@@ -50,37 +51,22 @@
         ThemeDir = "/run/current-system/sw/share/sddm/themes";
       };
     };
-
-# General = {
-#   DefaultSession = "hyprland.desktop";
-#   DisplayServer = "wayland";
-#   GreeterEnvironment = "QT_WAYLAND_SHELL_INTEGRATION=layer-shell";
-#   HaltCommand = "/run/current-system/systemd/bin/systemctl poweroff";
-#   InputMethod =
-#   Numlock = "none";
-#   RebootCommand = "/run/current-system/systemd/bin/systemctl reboot";
-# }
-#
-# Theme = {
-#   Current = "breeze";
-#   CursorSize = "24";
-#   CursorTheme = "breeze_cursors";
-#   FacesDir = "/run/current-system/sw/share/sddm/faces";
-#   ThemeDir = "/run/current-system/sw/share/sddm/themes";
-# }
-#
-# Users = {
-#   HideShells = "/run/current-system/sw/bin/nologin";
-#   HideUsers = "nixbld1,nixbld10,nixbld11,nixbld12,nixbld13,nixbld14,nixbld15,nixbld16,nixbld17,nixbld18,nixbld19,nixbld2,nixbld20,nixbld21,nixbld22,nixbld23,nixbld24,nixbld25,nixbld26,nixbld27,nixbld28,nixbld29,nixbld3,nixbld30,nixbld31,nixbld32,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9";
-#   MaximumUid = "30000";
-# }
-#
-# Wayland = {
-#   CompositorCommand = "/nix/store/vlb3bwbzlr5rg5944yyc8k91l0f9yv0f-kwin-6.4.3/bin/kwin_wayland --no-global-shortcuts --no-kactivities --no-lockscreen --locale1";
-#   EnableHiDPI = "true";
-#   SessionDir = "/nix/store/91q2jg3hvq16y5rvh73zi6z2z9w40spw-desktops/share/wayland-sessions";
-# }
   };
+  services.xserver.displayManager.emptty = {
+    # supports wayland.
+    enable = true;
+    package = pkgs.callPackage "${inputs.nixsys}/packages/emptty/wrapper.nix" {
+      emptty-unwrapped = pkgs.emptty;
+    };
+    configuration = {
+      AUTOLOGIN_SESSION = "hyprland";
+      AUTOLOGIN = false;
+      AUTOLOGIN_MAX_RETRY = 2;
+      DEFAULT_USER = "rickastley";
+    };
+  };
+  services.displayManager.sessionData.desktops = "/run/current-system/sw";
+  users.groups.nopasswdlogin.members = [ "rickastley" ];
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;

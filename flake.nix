@@ -52,6 +52,11 @@
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
 
     mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
+
+    nixsys = {
+      url = "github:the-argus/nixsys";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, agenix, stylix, ... } @ inputs : let

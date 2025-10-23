@@ -1,0 +1,17 @@
+[Unit]
+Description=emptty display manager
+After=  
+
+[Service]
+EnvironentFile=/etc/emptty/conf
+Type=idle
+ExecStart=/usr/bin/emptty -d
+Restart=always
+TTYPath=/dev/tty${TTY_NUMBER}
+TTYReset=yes
+KillMode=process
+IgnoreSIGPIPE=no
+SendSIGHUP=yes
+
+[Install]
+Alias=display-manager.service
