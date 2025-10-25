@@ -4,13 +4,16 @@
 
     Personal utilities to simply configurations. Feel free to opt in any of
     these in your setup!
-
-    Note: use other names like `utilities` instead of `utils` when adding this
-    flake to your inputs or otherwise conflicts with nixosConfigurations'
-    built-in arguments might occur.
-
     For nixosModules: `imports = [ inputs.utilities.nixosModules.<...> ];`
     For overlays: `lib' = with lib; extend(composeManyExtensions [ inputs.utilities.overlays.<...> ])`
+
+    All overlay utils have their unit tests so they should work stably even
+    though they are not guaranteed to run fast. I will appreciate any
+    improvement PRs!
+
+    NOTE: use other names like `utilities` instead of `utils` when adding this
+    flake to your inputs or otherwise conflicts with nixosConfigurations'
+    built-in arguments might occur.
   '';
 
   outputs = { self }: {

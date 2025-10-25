@@ -5,7 +5,8 @@
     Unit tests for overlay utils, based on:
     https://nix-community.github.io/nix-unit/examples/flake-parts.html
     Evaluation warnings will not display in the tests but instead be embedded
-    to a `_warn` attribute inside the returned value to work with the tests.
+    to the returned value (in different ways depends on the value type) to work
+    with the tests.
 
     NOTE: It is NOT necessary to use or understand this flake before opting in
     utilities from the parent directory.
