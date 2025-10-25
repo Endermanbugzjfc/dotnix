@@ -50,7 +50,7 @@
       system = "x86_64-linux";
     in nixpkgs.lib.nixosSystem {
       inherit system;
-      specialArgs = { inherit lib' inputs system; };
+      specialArgs = { inherit lib' system inputs; };
       modules = [
         # ./hosts/nix/configuration.nix
         ./hosts/nix/dev.nix

@@ -2,7 +2,7 @@
 
 { pkgs, lib', ... }: lib'.easyMerge "m" {
 # {{{ Writing
-  m.writing-pkgs.system.environmentPackages = with pkgs; [
+  m.writing.environment.systemPackages = with pkgs; [
     obsidian
 
     plover.dev
@@ -12,16 +12,16 @@
 
     citrix_workspace
   ];
-  m.writing-programs.programs = lib'.enableMulti ''
+  m.writing.programs = lib'.enableMulti ''
     onlyoffice
-  ''
+  '';
 # }}}
 
   m.math.environment.systemPackages = with pkgs; [
     numbat
   ];
 
-  m.reading-programs = lib'.enableMulti ''
+  m.reading = lib'.enableMulti ''
     foliate
   '';
 }

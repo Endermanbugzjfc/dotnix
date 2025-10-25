@@ -4,7 +4,7 @@
 in {
   options.features.nushell-yazi-cwd.enable = mkEnableOption "yazi change-current-directory wrapper of nushell";
   config.features.nushell-yazi-cwd.enable = mkDefault true;
-  config.programs.nushell.extraConfig = mkIf config.features.nushell-yazi-cwd ''
+  config.programs.nushell.extraConfig = mkIf config.features.nushell-yazi-cwd.enable ''
     def --env y [...args] {
       let tmp = (mktemp -t "yazi-cwd.XXXXXX")
       yazi ...$args --cwd-file $tmp
