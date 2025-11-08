@@ -122,6 +122,8 @@ self: super:
     # TODO: workflow
     windowrule = [
       "maximize, class: sublime_merge"
+      "maximize, class: discord"
+      ""
     ];
 
     # TODO: run nix flake update on idle or lock

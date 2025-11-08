@@ -33,16 +33,5 @@
     username = "rickastley";
     homeDirectory = "/home/rickastley";
     stateVersion = "25.05";
-
-    # packages = with pkgs; [
-#       # wl-clip-persistent
-#       neofetch
-#
-#         google-chrome
-#
-#         gcc
-#         cargo
-# # https://nixos.wiki/wiki/Python
-    # ];
   };
 }

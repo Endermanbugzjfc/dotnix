@@ -37,6 +37,37 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  home-manager.users.root.home = {
+    # username = "root";
+    # homeDirectory = "/root";
+    stateVersion = "25.05";
+    file.".ssh/config".text = ''
+      Host 192.168.0.*
+          # Prevent using ssh-agent or another keyfile, useful for testing
+          IdentitiesOnly yes
+          IdentityFile /root/.ssh/nixremote
+          # The weakly privileged user on the remote builder – if not set, 'root' is used – which will hopefully fail
+          User nixremote
+          StrictHostKeyChecking=accept-new
+    ''; # TODO: move this to global config (use Match instead of Host?? if that works)
+  };
+
+  # https://nixos.wiki/wiki/Distributed_build#Prerequisites
+  nix.buildMachines = [ {
+    hostName = "192.168.0.138";
+    system = "x86_64-linux";
+    protocol = "ssh-ng";
+    maxJobs = 99;
+    speedFactor = 2; # (Machine priority)
+    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+    mandatoryFeatures = [ ];
+  } ];
+  nix.distributedBuilds = true;
+  # nix.fallback = true;
+  # nix.extraOptions = ''
+  #   builders-use-substitutes = true
+  # '';
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.rickastley = {
     isNormalUser = true;
