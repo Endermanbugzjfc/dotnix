@@ -34,9 +34,54 @@ in {
   ];
 
   wayland.windowManager.hyprland.enable = true;
-  wayland.windowManager.hyprland.package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-  wayland.windowManager.hyprland.plugins = [
-    inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors
+  # wayland.windowManager.hyprland.package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+  nixpkgs.overlays = [
+# https://github.com/KZDKM/Hyprspace/pull/200#issuecomment-3503786991
+  (
+self: super:
+{
+  hyprlandPlugins = super.hyprlandPlugins // {
+    hyprspace = super.hyprlandPlugins.hyprspace.overrideAttrs (oldAttrs: {
+      # Fix compatibility with Hyprland 0.51.x
+      # Based on PR #200: https://github.com/KZDKM/Hyprspace/pull/200
+      # Updates dispatcher API from V1 to V2 and fixes type casting issues
+      postPatch = (oldAttrs.postPatch or "") + ''
+        # Update dispatcher API to V2
+        substituteInPlace src/main.cpp \
+          --replace-fail 'HyprlandAPI::addDispatcher(pHandle, "overview:toggle"' \
+                         'HyprlandAPI::addDispatcherV2(pHandle, "overview:toggle"' \
+          --replace-fail 'HyprlandAPI::addDispatcher(pHandle, "overview:open"' \
+                         'HyprlandAPI::addDispatcherV2(pHandle, "overview:open"' \
+          --replace-fail 'HyprlandAPI::addDispatcher(pHandle, "overview:close"' \
+                         'HyprlandAPI::addDispatcherV2(pHandle, "overview:close"'
+
+        # Fix type casting issue in Render.cpp for panelBorderWidth
+        substituteInPlace src/Render.cpp \
+          --replace-fail 'owner->m_transformedSize.x, Config::panelBorderWidth};' \
+                         'owner->m_transformedSize.x, static_cast<double>(Config::panelBorderWidth)};'
+
+        # Fix Input.cpp to handle createNewWorkspace return value (nodiscard in 0.51)
+        # This captures the return value to avoid compiler warnings/errors
+        # Replace both occurrences on lines 92 and 97
+        sed -i 's/if (g_pCompositor->getWorkspaceByID(wsIDName.id) == nullptr) g_pCompositor->createNewWorkspace(wsIDName.id, ownerID);/if (g_pCompositor->getWorkspaceByID(wsIDName.id) == nullptr) { auto ws = g_pCompositor->createNewWorkspace(wsIDName.id, ownerID); (void)ws; }/g' src/Input.cpp
+
+        # Fix gesture handling for Hyprland 0.51 - the old gesture config options were removed
+        # Use default values (4 fingers, 300 distance) when the old config doesn't exist
+        substituteInPlace src/Input.cpp \
+          --replace-fail 'int fingers = std::any_cast<Hyprlang::INT>(HyprlandAPI::getConfigValue(pHandle, "gestures:workspace_swipe_fingers")->getValue());' \
+                         'auto fingersConfig = HyprlandAPI::getConfigValue(pHandle, "gestures:workspace_swipe_fingers"); int fingers = fingersConfig ? std::any_cast<Hyprlang::INT>(fingersConfig->getValue()) : 4;' \
+          --replace-fail 'int distance = std::any_cast<Hyprlang::INT>(HyprlandAPI::getConfigValue(pHandle, "gestures:workspace_swipe_distance")->getValue());' \
+                         'auto distanceConfig = HyprlandAPI::getConfigValue(pHandle, "gestures:workspace_swipe_distance"); int distance = distanceConfig ? std::any_cast<Hyprlang::INT>(distanceConfig->getValue()) : 300;'
+      '';
+    });
+  };
+}
+  )
+  ];
+  wayland.windowManager.hyprland.plugins = with pkgs.hyprlandPlugins; [
+    hypr-dynamic-cursors
+    hyprspace
+    # hyprexpo
   ];
   wayland.windowManager.hyprland.settings = {
     inherit monitor;
@@ -51,7 +96,13 @@ in {
 
     gesture = [
       "3, swipe, resize"
+      # "4, down, overview:toggle"
     ];
+
+    # hyprexpo-gesture = [
+    #   "4, up, hyprexpo:expo"
+    # ];
+    # plugin.hyprexpo.gesture_distance = 6000;
 
     input.accel_profile = "flat";
     input.touchpad = {
@@ -63,7 +114,7 @@ in {
     };
     device = lib.mkForce [{
       "name" = lib.mkDefault "elan0524:01-04f3:3215-touchpad";
-      "sensitivity" =  "1.67";
+      "sensitivity" =  "1.67"; # Dear Gen Alpha: this is not intentional.
     }];
 
     misc.middle_click_paste = "false";
@@ -109,6 +160,8 @@ in {
       # "\$mainMod SHIFT, t, exec, "
       ", Print, exec, grim - | wl-copy"
       "SHIFT, Print, ${selectAndShoot}"
+
+      "\$mainMod, w, overview:toggle"##(.+)\" | tr -d \"[:space:]\" | wl-copy"
     ];
 
     bindm = [
