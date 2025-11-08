@@ -58,6 +58,11 @@ in {
 
     misc.middle_click_paste = "false";
 
+    # TODO: workflow
+    windowrule = [
+      "maximize, class: sublime_merge"
+    ];
+
     # TODO: run nix flake update on idle or lock
 
     # l -> locked, will also work when an input inhibitor (e.g. a lockscreen) is active.

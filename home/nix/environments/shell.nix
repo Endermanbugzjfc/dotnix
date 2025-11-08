@@ -1,7 +1,6 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     entr # Re-run command when file changes.
-    # nushell
   ];
 
   home.shell = {
@@ -35,6 +34,12 @@
 	      	cd $cwd
 	      }
 	      rm -fp $tmp
+      }
+
+      def aln [symlink: path] {
+        let real = (readlink -f $symlink)
+        rm $symlink
+        cat $real o> $symlink
       }
     '';
       # let chrome_open = "~/Run/feat/chrome-open"
