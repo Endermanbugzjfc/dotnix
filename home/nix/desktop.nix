@@ -39,6 +39,10 @@ in {
     # https://www.reddit.com/r/hyprland/comments/194rk1o/comment/khi0k17/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     xwayland.force_zero_scaling = "true";
 
+    gesture = [
+      "4, swipe, resize"
+    ];
+
     input.accel_profile = "flat";
     input.touchpad = {
       natural_scroll = "true";
