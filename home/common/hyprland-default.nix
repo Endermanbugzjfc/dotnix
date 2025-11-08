@@ -225,9 +225,9 @@
   };
 
   # https://wiki.hyprland.org/Configuring/Variables/#gestures
-  gestures = {
-    "workspace_swipe" = lib.mkDefault "false";
-  };
+  # gestures = {
+  #   "workspace_swipe" = lib.mkDefault "false";
+  # };
 
   # Example per-device config
   # See https://wiki.hyprland.org/Configuring/Keywords/#per-device-input-configs for more

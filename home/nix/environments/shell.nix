@@ -15,7 +15,12 @@
       fg = "job unfreeze";
       f = "job list";
       e = "enter";
-    };
+    } // (let
+      isTty = "[ \"$XDG_SESSION_TYPE\" == \"tty\" ]";
+    in {
+      h = "bash -c '${isTty} && hyprland'";
+      k = "bash -c '${isTty} && startplasma-wayland'";
+    });
     configFile.text = ''
       use std/dirs # Replacement for pushd, popd
       use std/dirs shells-aliases *
@@ -35,6 +40,10 @@
       # let chrome_open = "~/Run/feat/chrome-open"
       # mkdir $chrome_open
       # job spawn { job spawn { glob $"($chrome_open)/*" | str join "\n" | entr -r "google-chrome-stable " } }
+    environmentVariables = {
+      config.edit_mode = "vi";
+      EDITOR = "nvim";
+    };
   };
   programs.bat.enable = true;
   programs.yazi = {
@@ -54,6 +63,10 @@
     enableNushellIntegration = true;
   };
 
-  programs.direnv.enable = true;
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    enableNushellIntegration = true;
+  };
   programs.direnv.nix-direnv.enable = true;
 }

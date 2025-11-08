@@ -30,7 +30,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    # nixpkgs-stable.url = "github:nixos/nixpkgs?ref=nixos-25.05";
+    nixpkgs-25_05.url = "github:nixos/nixpkgs?ref=nixos-25.05";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -59,23 +59,32 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, agenix, stylix, ... } @ inputs : let
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    agenix,
+    stylix,
+    nixpkgs-25_05,
+    ...
+  } @ inputs : let
     inherit (self) outputs;
 
-    flake = {inherit inputs outputs; };
+    specialArgs = {inherit inputs outputs; };
 
     homeModule = home-manager.nixosModules.home-manager;
-    homeConfig = home-manager.lib.homeManagerConfiguration;
     nixHome.home-manager = {
-      extraSpecialArgs = flake;
+      extraSpecialArgs = specialArgs;
       users.rickastley = ./home/nix/home.nix;
     };
     agenixModule = agenix.nixosModules.default;
     stylixModule = stylix.nixosModules.stylix;
   in {
-    nixosConfigurations.nix = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nix = nixpkgs.lib.nixosSystem (let
       system = "x86_64-linux";
-      specialArgs = flake;
+    in {
+      inherit system;
+      specialArgs = specialArgs;
       modules = [
         ./hosts/nix
         homeModule # TODO: move to home.nix
@@ -83,7 +92,7 @@
         agenixModule # TODO: move to security.nix
         stylixModule # TODO: move to desktop.nix
       ];
-    };
+    });
 
     # homeConfigurations = {
     #   "rickastley@nix" = homeConfig {
