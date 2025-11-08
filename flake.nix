@@ -49,9 +49,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Hyprland stuff:
+    hyprland.url = "github:endermanbugzjfc/hyprland-stable/stable";
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
+    hypr-dynamic-cursors = {
+      url = "github:VirtCode/hypr-dynamic-cursors";
+      inputs.hyprland.follows = "hyprland"; # to make sure that the plugin is built for the correct version of hyprland
+    };
 
-    mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
+    # mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
 
     nixsys = {
       url = "github:the-argus/nixsys";

@@ -1,9 +1,15 @@
 { pkgs, lib, inputs, ... }: let
   monitor = ",preferred,auto,1.2";
+  # monitor = ",preferred,auto,2.0";
+
+  # Experiment log 2025-11-08: Citrix Workspace scaling works with static
+  # monitor config, but not dynamic. And the interface is so blurry so I should
+  # just stay with the current setup.
 in {
   home.packages = with pkgs; [
     grim  # Screenshot.
     slurp # Screen region selection.
+    satty # Annotation tool
 
     (writeShellScriptBin "hyprland-toggle-upside-down" ''
       #!/usr/bin/env bash
@@ -21,14 +27,17 @@ in {
     waypaper
 
     hyprland-qt-support
-    inputs.hyprqt6engine.packages.x86_64-linux.default
+    inputs.hyprqt6engine.packages.${pkgs.system}.default
 
     vlc
     wlvncc
   ];
 
   wayland.windowManager.hyprland.enable = true;
-  # wayland.windowManager.hyprland.settings = lib.mkForce {
+  wayland.windowManager.hyprland.package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+  wayland.windowManager.hyprland.plugins = [
+    inputs.hypr-dynamic-cursors.packages.${pkgs.system}.hypr-dynamic-cursors
+  ];
   wayland.windowManager.hyprland.settings = {
     inherit monitor;
     misc.disable_hyprland_logo = "true"; # Brought my own anime girl.
@@ -38,9 +47,10 @@ in {
     # Fix apps that do not follow NIXOS_OZONE_WL:
     # https://www.reddit.com/r/hyprland/comments/194rk1o/comment/khi0k17/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     xwayland.force_zero_scaling = "true";
+    # xwayland.force_zero_scaling = "false";
 
     gesture = [
-      "4, swipe, resize"
+      "3, swipe, resize"
     ];
 
     input.accel_profile = "flat";
@@ -49,7 +59,7 @@ in {
       disable_while_typing = "true";
       scroll_factor = "0.1";
       clickfinger_behavior = "1"; # Two fingers to right click.
-      drag_3fg = "1";
+      drag_3fg = "0"; # Use for resizing windows now (2025-11-09).
     };
     device = lib.mkForce [{
       "name" = lib.mkDefault "elan0524:01-04f3:3215-touchpad";
@@ -96,13 +106,25 @@ in {
       "\$mainMod, l, exec, hyprlock"
 
       "\$mainMod SHIFT, c, exec, hyprpicker | grep -oE \"##(.+)\" | tr -d \"[:space:]\" | wl-copy"
+      # "\$mainMod SHIFT, t, exec, "
       ", Print, exec, grim - | wl-copy"
-      "\$mainMod SHIFT, S, ${selectAndShoot}" # For laptop built-in key. TODO
-      "\$mainMod, Print, ${selectAndShoot}"
+      "SHIFT, Print, ${selectAndShoot}"
     ];
 
     bindm = [
       "\$mainMod ALT, mouse:272, resizewindow"
+    ];
+
+    bindel = [
+      # Laptop multimedia keys for volume and LCD brightness
+      # ",XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
+      ",XF86AudioRaiseVolume, exec, wpctl set-volume -l 2 @DEFAULT_AUDIO_SINK@ 5%+"
+      ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+
+      ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+      ",XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+      ",XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+"
+      ",XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
     ];
 
     # TODO: convert all hardcoded commands to nixpkgs dependency.
