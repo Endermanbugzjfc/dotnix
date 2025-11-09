@@ -20,6 +20,7 @@
       h = "bash -c '${isTty} && hyprland'";
       k = "bash -c '${isTty} && startplasma-wayland'";
     });
+    loginFile.text = "h";
     configFile.text = ''
       use std/dirs # Replacement for pushd, popd
       use std/dirs shells-aliases *

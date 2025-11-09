@@ -89,6 +89,12 @@ self: super:
     exec-once = "waypaper --random &";
     general.gaps_out = "0";
 
+    "plugin:dynamic-cursors" = {
+      mode = "stretch";
+      # shake.effects = "true";
+      hyprcursor.resolution = "512";
+    };
+
     # Fix apps that do not follow NIXOS_OZONE_WL:
     # https://www.reddit.com/r/hyprland/comments/194rk1o/comment/khi0k17/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     xwayland.force_zero_scaling = "true";
@@ -123,7 +129,6 @@ self: super:
     windowrule = [
       "maximize, class: sublime_merge"
       "maximize, class: discord"
-      ""
     ];
 
     # TODO: run nix flake update on idle or lock
@@ -163,7 +168,7 @@ self: super:
       ", Print, exec, grim - | wl-copy"
       "SHIFT, Print, ${selectAndShoot}"
 
-      "\$mainMod, w, overview:toggle"##(.+)\" | tr -d \"[:space:]\" | wl-copy"
+      "\$mainMod, w, overview:toggle"
     ];
 
     bindm = [
@@ -181,10 +186,6 @@ self: super:
       ",XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+"
       ",XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
     ];
-
-    # TODO: convert all hardcoded commands to nixpkgs dependency.
-    # TODO: lower voice = stay mute, higher = auto unmute, step 10. Hold = step 2.
-    # TODO: move to home manager keymap.nix
 
     env = [
       "QT_QPA_PLATFORMTHEME,hyprqt6engine"
