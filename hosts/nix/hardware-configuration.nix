@@ -32,10 +32,9 @@
     [
       {
         device = "/dev/disk/by-uuid/6afe82f3-8b75-4600-bd1a-df51fd7898cf";
+        # https://wiki.nixos.org/wiki/Swap#discard
+        options = [ "discard" ];
         # randomEncryption.enable = true;
-        options = [
-          "size=16G"
-        ];
       }
     ];
 

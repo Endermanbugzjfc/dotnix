@@ -27,7 +27,7 @@ in {
     waypaper
 
     hyprland-qt-support
-    inputs.hyprqt6engine.packages.${pkgs.system}.default
+    inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     vlc
     wlvncc

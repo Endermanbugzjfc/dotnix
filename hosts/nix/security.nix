@@ -1,7 +1,7 @@
 { inputs, pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     keybase-gui
-    inputs.agenix.packages.${pkgs.system}.default
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     openssl
   ];
 

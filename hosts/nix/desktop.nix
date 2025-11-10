@@ -19,15 +19,21 @@
   systemd.sleep.extraConfig = ''
       AllowHybridSleep=no
       AllowSuspendThenHibernate=yes
-      HibernateDelaySec=${builtins.toString (60*60*1)}
+      HibernateDelaySec=30m
+      SuspendState=mem
     ''; # TODO: variable hibnerate delay based on power supply mode.
+  services.logind = {
+  };
   services.logind.settings.Login = {
-    RuntimeDirectorySize = "14G"; # TODO: move to fs module
+    HandleLidSwitch = "suspend-then-hibernate";
+    HandleLidSwitchExternalPower = "suspend-then-hibernate";
+    HandleLidSwitchDocked = "suspend-then-hibernate";
+    LidSwitchIgnoreInhibited = "no";
 
-    HandleLidSwitch = "sleep";
-    HandleLidSwitchExternalPower = "ignore";
-    HandleLidSwitchDocked = "ignore";
-  }; # TODO: make service to turn off screen or do  fa  NCy ASITUFF
+    RuntimeDirectorySize = "14G"; # TODO: move to fs module
+    HandlePowerKey = "ignore";
+    HandlePowerKeyLongPress = "poweroff";
+  };
 
   # Enable the KDE Plasma Desktop Environment.
   services.desktopManager.plasma6.enable = true;
