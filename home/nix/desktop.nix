@@ -128,7 +128,8 @@ self: super:
     # TODO: workflow
     windowrule = [
       "maximize, class: sublime_merge title:.+"
-      "maximize, class: discord title:.+"
+      "maximize, class: discord title: .+"
+      "stayfocused, class: org.gnupg.pinentry-qt"
     ];
 
     # TODO: run nix flake update on idle or lock
