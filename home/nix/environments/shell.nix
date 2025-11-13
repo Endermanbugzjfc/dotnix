@@ -39,7 +39,7 @@
 
       def aln [symlink: path] {
         let real = (readlink -f $symlink)
-        rm $symlink
+        mv $symlink $".($symlink)"
         cat $real o> $symlink
       }
     '';
