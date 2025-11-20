@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }: let
+{ config, pkgs, lib, inputs, ... }: let
   monitor = ",preferred,auto,1.2";
   # monitor = ",preferred,auto,2.0";
 
@@ -22,6 +22,10 @@ in {
       fi
       exec $PREP
     '')
+    (let
+      plugins = config.wayland.windowManager.hyprland.plugins;
+      lines = lib.forEach plugins (plugin: "hyprctl plugin unload ${plugin}/lib/lib${plugin.pname}.so");
+    in writeShellScriptBin "hyprland-unload-plugins" (lib.concatStringsSep "\n" lines))
 
     hyprpicker
     waypaper
@@ -46,6 +50,7 @@ self: super:
       # Based on PR #200: https://github.com/KZDKM/Hyprspace/pull/200
       # Updates dispatcher API from V1 to V2 and fixes type casting issues
       postPatch = (oldAttrs.postPatch or "") + ''
+
         # Update dispatcher API to V2
         substituteInPlace src/main.cpp \
           --replace-fail 'HyprlandAPI::addDispatcher(pHandle, "overview:toggle"' \
@@ -129,7 +134,7 @@ self: super:
     windowrule = [
       "fullscreen, class:sublime_merge title:.+"
       "fullscreen, class:discord title:.+"
-      "no_initial_focus, class:steam title:.+"
+      "noinitialfocus, class:steam title:.+"
       "stayfocused, class:org.gnupg.pinentry-qt"
     ];
 
