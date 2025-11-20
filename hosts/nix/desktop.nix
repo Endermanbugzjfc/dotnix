@@ -73,6 +73,7 @@
   # services.displayManager.sessionData.desktops = "/run/current-system/sw";
   services.getty = {
     autologinUser = "rickastley";
+    autologinOnce = true;
   };
   users.groups.nopasswdlogin.members = [ "rickastley" ];
   # systemd.user.services.hyprland = {
