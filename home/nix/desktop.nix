@@ -127,9 +127,10 @@ self: super:
 
     # TODO: workflow
     windowrule = [
-      "maximize, class: sublime_merge title:.+"
-      "maximize, class: discord title: .+"
-      "stayfocused, class: org.gnupg.pinentry-qt"
+      "fullscreen, class:sublime_merge title:.+"
+      "fullscreen, class:discord title:.+"
+      "no_initial_focus, class:steam title:.+"
+      "stayfocused, class:org.gnupg.pinentry-qt"
     ];
 
     # TODO: run nix flake update on idle or lock
@@ -160,6 +161,8 @@ self: super:
       "\$mainMod SHIFT, l, movewindow, r"
       "\$mainMod SHIFT, k, movewindow, u"
       "\$mainMod SHIFT, j, movewindow, d"
+
+      "\$mainMod, f, fullscreen"
 
       "\$mainMod ALT, up, exec, hyprland-toggle-upside-down"
       "\$mainMod, l, exec, hyprlock"
