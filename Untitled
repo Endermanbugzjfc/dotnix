@@ -1,17 +1,275 @@
-[Unit]
-Description=emptty display manager
-After=  
+pid /run/nginx/nginx.pid;
+error_log stderr debug;
+daemon off;
+events {
+}
+http {
+	# Load mime types and configure maximum size of the types hash tables.
+	include /nix/store/g4z9m2pl1wcv35yzgjg1934gmj83gx9m-mailcap-2.1.54/etc/nginx/mime.types;
+	types_hash_max_size 2688;
+	include /nix/store/1lzahhm6ih34q8lyhg7hs4isdnqldks2-nginx-1.28.0/conf/fastcgi.conf;
+	include /nix/store/1lzahhm6ih34q8lyhg7hs4isdnqldks2-nginx-1.28.0/conf/uwsgi_params;
+	default_type application/octet-stream;
+	ssl_protocols TLSv1.2 TLSv1.3;
+	ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-CHACHA20-POLY1305;
+	# $connection_upgrade is used for websocket proxying
+	map $http_upgrade $connection_upgrade {
+		default upgrade;
+		''      close;
+	}
+	client_max_body_size 10m;
+	server_tokens off;
+	resolver 8.8.8.8 8.8.4.4 1.1.1.1 valid=300s;
+	resolver_timeout 5s;
+	# Map for favicon replacements
+	map $host $favicon_replacement {
+		default "";
+		"github.com" "https://google.com/favicon.ico";
+		"moodle.telt.unsw.edu.au" "https://google.com/favicon.ico";
+		"www.github.com" "https://google.com/favicon.ico";
+		"www.moodle.telt.unsw.edu.au" "https://google.com/favicon.ico";
+		"www.youtube.com" "https://google.com/favicon.ico";
+		"youtube.com" "https://google.com/favicon.ico";
+	}
+	server {
+		listen 127.0.0.1:443 ssl ;
+		server_name github.com ;
+		location / {
+			proxy_pass https://github.com$request_uri;
+			proxy_set_header Host github.com;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		location = /debug {
+			add_header Content-Type text/html;
+			return 200 '
+			<html>
+			<body>
+			<h1>Debug Info</h1>
+			<p>Host: $host</p>
+			<p>Request URI: $request_uri</p>
+			<p>Favicon Replacement: $favicon_replacement</p>
+			<p>SSL: $ssl_protocol $ssl_cipher</p>
+			<p>CA Path: /nix/store/s3vciv7mdm2q1yvipd1w9injl307q6f9-proxy-ca/ca.crt</p>
+			</body>
+			</html>
+			';
+		}
+		location = /favicon.ico {
+			# If we have a replacement, redirect to it
+			if ($favicon_replacement != "") {
+				return 302 $favicon_replacement;
+			}
+			# Otherwise proxy to actual site
+			proxy_pass https://github.com/favicon.ico;
+			proxy_set_header Host github.com;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		access_log /var/log/nginx/github.com-access.log;
+		error_log /var/log/nginx/github.com-error.log debug;
+	}
+	server {
+		listen 127.0.0.1:443 ssl ;
+		server_name moodle.telt.unsw.edu.au ;
+		location / {
+			proxy_pass https://moodle.telt.unsw.edu.au$request_uri;
+			proxy_set_header Host moodle.telt.unsw.edu.au;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		location = /debug {
+			add_header Content-Type text/html;
+			return 200 '
+			<html>
+			<body>
+			<h1>Debug Info</h1>
+			<p>Host: $host</p>
+			<p>Request URI: $request_uri</p>
+			<p>Favicon Replacement: $favicon_replacement</p>
+			<p>SSL: $ssl_protocol $ssl_cipher</p>
+			<p>CA Path: /nix/store/s3vciv7mdm2q1yvipd1w9injl307q6f9-proxy-ca/ca.crt</p>
+			</body>
+			</html>
+			';
+		}
+		location = /favicon.ico {
+			# If we have a replacement, redirect to it
+			if ($favicon_replacement != "") {
+				return 302 $favicon_replacement;
+			}
+			# Otherwise proxy to actual site
+			proxy_pass https://moodle.telt.unsw.edu.au/favicon.ico;
+			proxy_set_header Host moodle.telt.unsw.edu.au;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		access_log /var/log/nginx/moodle.telt.unsw.edu.au-access.log;
+		error_log /var/log/nginx/moodle.telt.unsw.edu.au-error.log debug;
+	}
+	server {
+		listen 127.0.0.1:443 ssl ;
+		server_name www.github.com ;
+		location / {
+			proxy_pass https://www.github.com$request_uri;
+			proxy_set_header Host www.github.com;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		location = /debug {
+			add_header Content-Type text/html;
+			return 200 '
+			<html>
+			<body>
+			<h1>Debug Info</h1>
+			<p>Host: $host</p>
+			<p>Request URI: $request_uri</p>
+			<p>Favicon Replacement: $favicon_replacement</p>
+			<p>SSL: $ssl_protocol $ssl_cipher</p>
+			<p>CA Path: /nix/store/s3vciv7mdm2q1yvipd1w9injl307q6f9-proxy-ca/ca.crt</p>
+			</body>
+			</html>
+			';
+		}
+		location = /favicon.ico {
+			# If we have a replacement, redirect to it
+			if ($favicon_replacement != "") {
+				return 302 $favicon_replacement;
+			}
+			# Otherwise proxy to actual site
+			proxy_pass https://www.github.com/favicon.ico;
+			proxy_set_header Host www.github.com;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		access_log /var/log/nginx/www.github.com-access.log;
+		error_log /var/log/nginx/www.github.com-error.log debug;
+	}
+	server {
+		listen 127.0.0.1:443 ssl ;
+		server_name www.moodle.telt.unsw.edu.au ;
+		location / {
+			proxy_pass https://www.moodle.telt.unsw.edu.au$request_uri;
+			proxy_set_header Host www.moodle.telt.unsw.edu.au;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		location = /debug {
+			add_header Content-Type text/html;
+			return 200 '
+			<html>
+			<body>
+			<h1>Debug Info</h1>
+			<p>Host: $host</p>
+			<p>Request URI: $request_uri</p>
+			<p>Favicon Replacement: $favicon_replacement</p>
+			<p>SSL: $ssl_protocol $ssl_cipher</p>
+			<p>CA Path: /nix/store/s3vciv7mdm2q1yvipd1w9injl307q6f9-proxy-ca/ca.crt</p>
+			</body>
+			</html>
+			';
+		}
+		location = /favicon.ico {
+			# If we have a replacement, redirect to it
+			if ($favicon_replacement != "") {
+				return 302 $favicon_replacement;
+			}
+			# Otherwise proxy to actual site
+			proxy_pass https://www.moodle.telt.unsw.edu.au/favicon.ico;
+			proxy_set_header Host www.moodle.telt.unsw.edu.au;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		access_log /var/log/nginx/www.moodle.telt.unsw.edu.au-access.log;
+		error_log /var/log/nginx/www.moodle.telt.unsw.edu.au-error.log debug;
+	}
+	server {
+		listen 127.0.0.1:443 ssl ;
+		server_name www.youtube.com ;
+		location / {
+			proxy_pass https://www.youtube.com$request_uri;
+			proxy_set_header Host www.youtube.com;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		location = /debug {
+			add_header Content-Type text/html;
+			return 200 '
+			<html>
+			<body>
+			<h1>Debug Info</h1>
+			<p>Host: $host</p>
+			<p>Request URI: $request_uri</p>
+			<p>Favicon Replacement: $favicon_replacement</p>
+			<p>SSL: $ssl_protocol $ssl_cipher</p>
+			<p>CA Path: /nix/store/s3vciv7mdm2q1yvipd1w9injl307q6f9-proxy-ca/ca.crt</p>
+			</body>
+			</html>
+			';
+		}
+		location = /favicon.ico {
+			# If we have a replacement, redirect to it
+			if ($favicon_replacement != "") {
+				return 302 $favicon_replacement;
+			}
+			# Otherwise proxy to actual site
+			proxy_pass https://www.youtube.com/favicon.ico;
+			proxy_set_header Host www.youtube.com;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		access_log /var/log/nginx/www.youtube.com-access.log;
+		error_log /var/log/nginx/www.youtube.com-error.log debug;
+	}
+	server {
+		listen 127.0.0.1:443 ssl ;
+		server_name youtube.com ;
+		location / {
+			proxy_pass https://youtube.com$request_uri;
+			proxy_set_header Host youtube.com;
+			proxy_set_header X-Real-IP $remote_addr;
+			proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		location = /debug {
+			add_header Content-Type text/html;
+			return 200 '
+			<html>
+			<body>
+			<h1>Debug Info</h1>
+			<p>Host: $host</p>
+			<p>Request URI: $request_uri</p>
+			<p>Favicon Replacement: $favicon_replacement</p>
+			<p>SSL: $ssl_protocol $ssl_cipher</p>
+			<p>CA Path: /nix/store/s3vciv7mdm2q1yvipd1w9injl307q6f9-proxy-ca/ca.crt</p>
+			</body>
+			</html>
+			';
+		}
+		location = /favicon.ico {
+			# If we have a replacement, redirect to it
+			if ($favicon_replacement != "") {
+				return 302 $favicon_replacement;
+			}
+			# Otherwise proxy to actual site
+			proxy_pass https://youtube.com/favicon.ico;
+			proxy_set_header Host youtube.com;
+			proxy_ssl_server_name on;
+			proxy_ssl_protocols TLSv1.2 TLSv1.3;
+		}
+		access_log /var/log/nginx/youtube.com-access.log;
+		error_log /var/log/nginx/youtube.com-error.log debug;
+	}
+}
 
-[Service]
-EnvironentFile=/etc/emptty/conf
-Type=idle
-ExecStart=/usr/bin/emptty -d
-Restart=always
-TTYPath=/dev/tty${TTY_NUMBER}
-TTYReset=yes
-KillMode=process
-IgnoreSIGPIPE=no
-SendSIGHUP=yes
-
-[Install]
-Alias=display-manager.service

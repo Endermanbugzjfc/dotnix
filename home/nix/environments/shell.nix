@@ -43,6 +43,7 @@
         cat $real o> $symlink
       }
     '';
+# TODO: aln sudo flag (after jujutsu)
       # let chrome_open = "~/Run/feat/chrome-open"
       # mkdir $chrome_open
       # job spawn { job spawn { glob $"($chrome_open)/*" | str join "\n" | entr -r "google-chrome-stable " } }

@@ -13,5 +13,6 @@
     ./information.nix
     ./games.nix
     ./debug.nix
+    ./favicon.nix
   ];
 }
