@@ -22,8 +22,8 @@
     powerOnBoot = false;
   };
 
-  services.favicon-proxy = {
-    enable = true;
-    users = [ "rickastley" ];
-  };
+  # services.favicon-proxy = {
+  #   enable = true;
+  #   users = [ "rickastley" ];
+  # };
 }
