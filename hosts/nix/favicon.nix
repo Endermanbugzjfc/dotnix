@@ -15,14 +15,36 @@ let
   ];
   
   # Real upstream IPs (to avoid DNS resolution loops)
+# TODO: temp code
+  # testFn = domain: domain + "m";
+  testFn = domain: domain;
+  domains2 = domains;
+  # domains2 = [
+  #   "youtube.co"
+  #   "www.youtube.co"
+  #   "github.co"
+  #   "www.github.co"
+  #   "moodle.telt.unsw.edu.au"
+  #   "www.moodle.telt.unsw.edu.au"
+  # ];
   upstreamHosts = {
-    "youtube.com" = "142.250.70.174";  # Google IP
-    "www.youtube.com" = "142.250.70.174";
-    "github.com" = "140.82.121.4";  # GitHub IP
-    "www.github.com" = "140.82.121.4";
+    "youtube.com" = "142.251.221.78";  # Google IP
+    "www.youtube.com" = "142.251.221.78";
+    "github.com" = "4.237.22.38";  # GitHub IP
+    "www.github.com" = "4.237.22.38";
+
     "moodle.telt.unsw.edu.au" = "149.28.11.230";  # UNSW IP
     "www.moodle.telt.unsw.edu.au" = "149.28.11.230";
   };
+  # upstreamHosts = {
+  #   "youtube.co" = "142.251.221.78";  # Google IP
+  #   "www.youtube.co" = "142.251.221.78";
+  #   "github.co" = "4.237.22.38";  # GitHub IP
+  #   "www.github.co" = "4.237.22.38";
+  #
+  #   "moodle.telt.unsw.edu.au" = "149.28.11.230";  # UNSW IP
+  #   "www.moodle.telt.unsw.edu.au" = "149.28.11.230";
+  # };
   
   # Map domains to replacement favicons
   faviconReplacements = let
@@ -120,11 +142,68 @@ let
   domainCerts = builtins.listToAttrs (map (domain: {
     name = domain;
     value = mkDomainCert domain;
-  }) domains);
+  }) domains2);
 
 in {
   # Trust the CA certificate system-wide
   security.pki.certificateFiles = [ "${proxyCA}/ca.crt" ];
+
+  systemd.services.favicon-proxy-resolve = {
+    description = "Resolve upstream IPs for favicon proxy";
+    wantedBy = [ "multi-user.target" ];
+    before = [ "nftables.service" ];
+    
+    serviceConfig = let
+      runtimeDir = "/run/FaviconReplacement";
+      resolveDomainsScript = pkgs.writeShellScript "resolve-domains" ''
+        set -euo pipefail
+        
+        mkdir -p ${runtimeDir}
+        
+        # Create IP list file for nftables
+        IP_FILE="${runtimeDir}/upstream-ips.txt"
+        TEMP_FILE="$IP_FILE.tmp"
+        
+        echo "# Auto-generated upstream IPs - $(date)" > "$TEMP_FILE"
+        
+        ${lib.concatMapStringsSep "\n    " (domain: ''
+          echo "Resolving ${domain}..." >&2
+          IP=$(${pkgs.host}/bin/host -t A ${domain} 8.8.8.8 | ${pkgs.gnugrep}/bin/grep "has address" | head -1 | ${pkgs.gawk}/bin/awk '{print $NF}' || echo "")
+          if [ -n "$IP" ]; then
+            echo "$IP" >> "$TEMP_FILE"
+            echo "${domain} -> $IP" >&2
+          else
+            echo "Failed to resolve ${domain}" >&2
+          fi
+        '') domains}
+        
+        # Atomic move
+        mv "$TEMP_FILE" "$IP_FILE"
+        
+        echo "IP resolution complete. IP file updated at $IP_FILE" >&2
+        
+        # Reload nftables to pick up new IPs
+        ${pkgs.systemd}/bin/systemctl reload nftables.service || true
+      '';
+    in {
+      Type = "oneshot";
+      ExecStart = "${resolveDomainsScript}";
+      RuntimeDirectory = "FaviconReplacement";
+      RuntimeDirectoryPreserve = "yes";
+    };
+  };
+  
+  # Timer to run resolution periodically
+  systemd.timers.favicon-proxy-resolve = {
+    description = "Timer for favicon proxy IP resolution";
+    wantedBy = [ "timers.target" ];
+    
+    timerConfig = {
+      OnBootSec = "0";
+      OnUnitActiveSec = "6h";
+      Unit = "favicon-proxy-resolve.service";
+    };
+  };
 
   # Configure nginx with SSL termination
   services.nginx = {
@@ -148,6 +227,16 @@ in {
     virtualHosts = builtins.listToAttrs (map (domain: 
       let
         domainCert = domainCerts.${domain};
+        address = upstreamHosts.${domain};
+        pass = [
+          "proxy_pass http://${address}$request_uri;"
+          "proxy_set_header Host ${testFn domain};"
+          "proxy_set_header X-Real-IP ${address};"
+          "proxy_set_header X-Forwarded-For ${address};"
+          "proxy_ssl_server_name on;"
+          "proxy_ssl_protocols TLSv1.2 TLSv1.3;"
+        ];
+        passDebug = lib.forEach pass (line: "<p>${line}</p>");
       in {
       name = domain;
       value = {
@@ -173,10 +262,13 @@ in {
                 <body>
                   <h1>Debug Info</h1>
                   <p>Host: $host</p>
+                  <p>Host: $host</p>
                   <p>Request URI: $request_uri</p>
                   <p>Favicon Replacement: $favicon_replacement</p>
                   <p>SSL: $ssl_protocol $ssl_cipher</p>
                   <p>CA Path: ${proxyCA}/ca.crt</p>
+                  <h4>Expected proxy commands (not being executed):</h4>
+                  ${lib.concatStringsSep "\n" passDebug}
                 </body>
                 </html>
               ';
@@ -191,28 +283,22 @@ in {
                 return 302 $favicon_replacement;
               }
               
+              return 404;
               # Otherwise proxy to actual site
-              proxy_pass https://${domain}/favicon.ico;
-              proxy_set_header Host ${domain};
-              proxy_ssl_server_name on;
-              proxy_ssl_protocols TLSv1.2 TLSv1.3;
+              # proxy_pass https://${domain}/favicon.ico;
+              # proxy_set_header Host ${domain};
+              # proxy_ssl_server_name on;
+              # proxy_ssl_protocols TLSv1.2 TLSv1.3;
             '';
           };
           
           # Proxy everything else
           "/" = {
-            extraConfig = ''
-              proxy_pass https://${domain}$request_uri;
-              proxy_set_header Host ${domain};
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_ssl_server_name on;
-              proxy_ssl_protocols TLSv1.2 TLSv1.3;
-            '';
+            extraConfig = lib.concatStringsSep "\n" pass;
           };
         };
       };
-    }) domains);
+    }) domains2);
   };
 
   # Ensure nginx is not exposed through firewall
@@ -220,7 +306,7 @@ in {
   
   # Redirect domains to localhost
   networking.hosts = {
-    "127.0.0.1" = domains;
+    "127.0.0.1" = domains2;
   };
 }
 
