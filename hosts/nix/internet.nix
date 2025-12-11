@@ -21,4 +21,9 @@
     enable = true;
     powerOnBoot = false;
   };
+
+  services.favicon-proxy = {
+    enable = true;
+    users = [ "rickastley" ];
+  };
 }
