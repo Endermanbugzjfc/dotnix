@@ -35,6 +35,9 @@ in {
 
     vlc
     wlvncc
+
+    # I never liked desktop notifications but Plover depends on notify-send:
+    libnotify
   ];
 
   wayland.windowManager.hyprland.enable = true;
@@ -84,8 +87,8 @@ self: super:
   )
   ];
   wayland.windowManager.hyprland.plugins = with pkgs.hyprlandPlugins; [
-    hypr-dynamic-cursors
-    hyprspace
+    # hypr-dynamic-cursors
+    # hyprspace
     # hyprexpo
   ];
   wayland.windowManager.hyprland.settings = {
@@ -132,10 +135,10 @@ self: super:
 
     # TODO: workflow
     windowrule = [
-      "fullscreen, class:sublime_merge title:.+"
-      "fullscreen, class:discord title:.+"
-      "noinitialfocus, class:steam title:.+"
-      "stayfocused, class:org.gnupg.pinentry-qt"
+      "fullscreen on, match:class sublime_merge match:title .+"
+      "fullscreen on, match:class discord match:title .+"
+      "no_initial_focus on, match:class steam title:.+"
+      "stay_focused on, match:class org.gnupg.pinentry-qt"
     ];
 
     # TODO: run nix flake update on idle or lock
@@ -177,7 +180,7 @@ self: super:
       ", Print, exec, grim - | wl-copy"
       "SHIFT, Print, ${selectAndShoot}"
 
-      "\$mainMod, w, overview:toggle"
+      #"\$mainMod, w, overview:toggle"
     ];
 
     bindm = [
@@ -235,4 +238,7 @@ self: super:
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/ic-orange-ppl.yaml";
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/blueforest.yaml";
   };
+
+  # I never liked desktop notifications but Plover depends on notify-send:
+  services.dunst.enable = true;
 }

@@ -17,7 +17,7 @@
     } // (let
       isTty = "[ \"$XDG_SESSION_TYPE\" == \"tty\" ]";
     in {
-      h = "bash -c '${isTty} && hyprland'";
+      h = "bash -c '${isTty} && start-hyprland'";
       k = "bash -c '${isTty} && startplasma-wayland'";
     });
     loginFile.text = "h";
