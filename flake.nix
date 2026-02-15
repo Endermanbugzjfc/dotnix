@@ -12,7 +12,12 @@
 
     # {{{ General
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager/master";
     nix-update-input.url = "github:vimjoyer/nix-update-input";
+    # }}}
+
+    # {{{ Inputs Override
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-update-input.inputs.nixpkgs.follows = "nixpkgs";
     # }}}
   };
