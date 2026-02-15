@@ -4,17 +4,19 @@
   '';
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    # {{{ Dendritic Pattern
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
+    default-systems.url = "github:nix-systems/default";
+    # }}}
+
+    # {{{ General
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nix-update-input.url = "github:vimjoyer/nix-update-input";
+    nix-update-input.inputs.nixpkgs.follows = "nixpkgs";
+    # }}}
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-  }: flake-utils.lib.eachDefaultSystem (system: let
-    pkgs = nixpkgs.legacyPackages.${system};
-  in {
-    devShells.default = pkgs.callPackage ./shell.nix {};
-  });
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; }
+    (inputs.import-tree ./modules);
 }
