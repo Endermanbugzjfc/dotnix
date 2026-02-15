@@ -11,8 +11,12 @@
     ...
   }:
   let
-    cfg = config.services.couchdb;
+    cfg = config.services.couchdb // cfg';
     opt = options.services.couchdb;
+    # {{{ Home-manager replacements:
+    cfg'.user = config.home.username;
+    cfg'.group = cfg'.user;
+    # }}}
 
     baseConfig = {
       couchdb = {
@@ -173,7 +177,7 @@
     config = lib.mkIf cfg.enable {
       home.packages = [ cfg.package ];
 
-      systemd.tmpfiles.rules = [
+      systemd.user.tmpfiles.rules = [
         "d '${dirOf cfg.uriFile}' - ${cfg.user} ${cfg.group} - -"
         "f '${cfg.logFile}' - ${cfg.user} ${cfg.group} - -"
         "d '${cfg.databaseDir}' -  ${cfg.user} ${cfg.group} - -"
@@ -201,8 +205,8 @@
         };
 
         serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
+          # User = cfg.user;
+          # Group = cfg.group;
           ExecStart = executable;
         };
       };
