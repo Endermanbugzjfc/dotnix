@@ -2,8 +2,10 @@
   mkShellNoCC,
 
   jujutsu,
+  nh,
 }: mkShellNoCC {
   packages = [
-    jujutsu
+    jujutsu # version control.
+    nh      # Nix Helper.
   ];
 }
