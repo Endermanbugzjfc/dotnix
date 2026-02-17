@@ -58,6 +58,7 @@
       url = "github:the-argus/nixsys";
       flake = false;
     };
+    plover.url = "github:openstenoproject/plover-flake";
   };
 
   outputs = {

@@ -1,9 +1,11 @@
 # Plover, Obsidian Notes, WPS, OnlyOffice
 { config, pkgs, inputs, ... }: {
+  imports = [
+    inputs.plover.homeManagerModules.plover
+  ];
+
   home.packages = with pkgs; [
     obsidian
-
-    plover.dev
 
     wpsoffice
     xournalpp
@@ -21,4 +23,8 @@
   programs.foliate = {
     enable = true;
   };
+
+  programs.plover.enable = true;
+  programs.plover.package = inputs.plover.packages."x86_64-linux".plover.withPlugins (ps: with ps; [
+  ]);
 }
