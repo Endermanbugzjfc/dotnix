@@ -53,16 +53,16 @@
   };
 
   # https://nixos.wiki/wiki/Distributed_build#Prerequisites
-  nix.buildMachines = [ {
-    hostName = "192.168.0.138";
-    system = "x86_64-linux";
-    protocol = "ssh-ng";
-    maxJobs = 99;
-    speedFactor = 2; # (Machine priority)
-    supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
-    mandatoryFeatures = [ ];
-  } ];
-  nix.distributedBuilds = true;
+  # nix.buildMachines = [ {
+  #   hostName = "192.168.0.138";
+  #   system = "x86_64-linux";
+  #   protocol = "ssh-ng";
+  #   maxJobs = 99;
+  #   speedFactor = 2; # (Machine priority)
+  #   supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+  #   mandatoryFeatures = [ ];
+  # } ];
+  # nix.distributedBuilds = true;
   # nix.fallback = true;
   # nix.extraOptions = ''
   #   builders-use-substitutes = true
