@@ -16,6 +16,14 @@
       commit.gpgsign = true;
     };
   };
+  programs.ssh.enable = true;
+  programs.ssh.enableDefaultConfig = false;
+  programs.ssh.matchBlocks."github.com" = {
+    hostname = "github.com";
+    user = "git";
+    identityFile = "~/.ssh/github_ezjfc";
+    identitiesOnly = true;
+  };
 
   programs.lazygit.enable = true;
 }
