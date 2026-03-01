@@ -2,6 +2,6 @@
   home.packages = with pkgs; [
     cargo
     rust-analyzer
-    ra-multiplex
+    lspmux
   ];
 }
