@@ -179,6 +179,24 @@
         "type": "github"
       }
     },
+    "nix-update-input": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1759055208,
+        "narHash": "sha256-qzg8msJ20ujAqf2/3CbDpjBsu/wMNXIVt2CaZpmerqg=",
+        "owner": "vimjoyer",
+        "repo": "nix-update-input",
+        "rev": "ef854df0a26339e2fa7adbc88ee072c68b5e55e5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vimjoyer",
+        "repo": "nix-update-input",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1754028485,
@@ -229,6 +247,22 @@
     },
     "nixpkgs_3": {
       "locked": {
+        "lastModified": 1695145219,
+        "narHash": "sha256-Eoe9IHbvmo5wEDeJXKFOpKUwxYJIOxKUesounVccNYk=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "5ba549eafcf3e33405e5f66decd1a72356632b96",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_4": {
+      "locked": {
         "lastModified": 1767379071,
         "narHash": "sha256-EgE0pxsrW9jp9YFMkHL9JMXxcqi/OoumPJYwf+Okucw=",
         "owner": "nixos",
@@ -243,7 +277,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1771008912,
         "narHash": "sha256-gf2AmWVTs8lEq7z/3ZAsgnZDhWIckkb+ZnAo5RzSxJg=",
@@ -261,7 +295,7 @@
     },
     "plover": {
       "inputs": {
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_5",
         "plover": "plover_2",
         "plover-stroke": "plover-stroke",
         "plover2cat": "plover2cat",
@@ -352,7 +386,8 @@
         "home-manager": "home-manager_2",
         "hyprqt6engine": "hyprqt6engine",
         "nix-index-database": "nix-index-database",
-        "nixpkgs": "nixpkgs_3",
+        "nix-update-input": "nix-update-input",
+        "nixpkgs": "nixpkgs_4",
         "nixpkgs-25_05": "nixpkgs-25_05",
         "plover": "plover"
       }

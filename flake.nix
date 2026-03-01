@@ -56,6 +56,7 @@
     # mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
 
     plover.url = "github:openstenoproject/plover-flake";
+    nix-update-input.url = "github:vimjoyer/nix-update-input";
   };
 
   outputs = {
