@@ -44,20 +44,17 @@
 
     agenix.url = "github:ryantm/agenix";
 
-    stylix = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # stylix = {
+    #   url = "github:danth/stylix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    # TODO: checkout base16.nix and nix-colors
 
     # Hyprland stuff:
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
 
     # mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
 
-    nixsys = {
-      url = "github:the-argus/nixsys";
-      flake = false;
-    };
     plover.url = "github:openstenoproject/plover-flake";
   };
 
@@ -66,7 +63,6 @@
     nixpkgs,
     home-manager,
     agenix,
-    stylix,
     nixpkgs-25_05,
     ...
   } @ inputs : let
@@ -80,7 +76,6 @@
       users.rickastley = ./home/nix/home.nix;
     };
     agenixModule = agenix.nixosModules.default;
-    stylixModule = stylix.nixosModules.stylix;
   in {
     nixosConfigurations.nix = nixpkgs.lib.nixosSystem (let
       system = "x86_64-linux";
@@ -92,7 +87,6 @@
         homeModule # TODO: move to home.nix
         nixHome # TODO: partially move to home.nix
         agenixModule # TODO: move to security.nix
-        stylixModule # TODO: move to desktop.nix
       ];
     });
 

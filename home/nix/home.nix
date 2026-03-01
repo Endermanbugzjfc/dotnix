@@ -4,7 +4,6 @@
 
 { inputs, ... }: {
   imports = [
-    inputs.stylix.homeModules.stylix
     inputs.agenix.homeManagerModules.default
     ../common
 

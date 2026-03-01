@@ -233,12 +233,8 @@ self: super:
     enable = true;
   };
 
-  stylix = {
-    enable = false;
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/ic-orange-ppl.yaml";
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/blueforest.yaml";
-  };
-
   # I never liked desktop notifications but Plover depends on notify-send:
   services.dunst.enable = true;
+
+  # TODO: notify on OCR script
 }

@@ -18,5 +18,4 @@
       dynamic_backgronud_opacity = true;
     };
   };
-  stylix.targets.kitty.enable = true;
 }
