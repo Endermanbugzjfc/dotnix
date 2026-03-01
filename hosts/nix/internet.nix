@@ -1,12 +1,19 @@
 # Network services, web browsers...
 
-{
+{ pkgs, ... }: {
+  environment.systemPackages = with pkgs; [
+    openvpn
+  ];
+
   lazy-services = [
     "sshd"
   ];
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    plugins = with pkgs; [ networkmanager-openvpn ];
+  };
   # Conflicts with NetworkManager:
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
