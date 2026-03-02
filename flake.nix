@@ -92,9 +92,9 @@
     });
 
     # homeConfigurations = {
-    #   "rickastley@nix" = homeConfig {
+    #   "rickastley@nix" = home-manager.lib.homeManagerConfiguration {
     #     pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    #     extraSpecialArgs = flake;
+    #     extraSpecialArgs = specialArgs;
     #     modules = [
     #       ./home/nix/home.nix
     #     ];

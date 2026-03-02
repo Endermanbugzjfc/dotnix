@@ -11,6 +11,12 @@
   ];
 
   programs.gnupg.agent.enable = true;
+  programs.gnupg.agent.settings = let
+    storeSeconds = 60 * 60 * 2;
+  in {
+    default-cache-ttl = storeSeconds;
+    max-cache-ttl = storeSeconds;
+  };
 
   # Use different password for login and sudo:
   security.pam.services.sudo.text = let
