@@ -1,6 +1,6 @@
 # Desktop experience.
 
-{ pkgs, inputs, ... }: {
+{ lib, pkgs, inputs, ... }: {
 
   imports = [
     ../common/features/enable-hyprland.nix
@@ -71,8 +71,9 @@
   # };
   # services.displayManager.sessionData.desktops = "/run/current-system/sw";
   services.getty = {
-    autologinUser = "rickastley";
-    # autologinOnce = true;
+    # autologinUser = "rickastley";
+    autologinOnce = lib.mkForce false;
+    # autologin = lib.mkForce false;
   };
   users.groups.nopasswdlogin.members = [ "rickastley" ];
   # systemd.user.services.hyprland = {
