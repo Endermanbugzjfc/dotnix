@@ -20,7 +20,7 @@
 
   # Use different password for login and sudo:
   security.pam.services.sudo.text = let
-    passText = pkgs.writeText "passText" ''
+    dbKV = pkgs.writeText "dbKV" ''
       rickastley
       00
     '';
@@ -29,13 +29,14 @@
       inherit (pkgs) db48;
     } ''
       mkdir $out
-      $db48/bin/db_load -T -t hash -f ${passText} $out/pass.db
+      $db48/bin/db_load -T -t hash -f ${dbKV} $out/pass.db
     '';
   in lib.mkForce ''
     # Account management.
     account required ${pkgs.pam}/lib/security/pam_unix.so
 
     # Authentication management.
+    # Do NOT suffix the .db file extension name after "/pass":
     auth sufficient ${pkgs.pam}/lib/security/pam_userdb.so db=${passDb}/pass
     auth sufficient ${pkgs.pam}/lib/security/pam_unix.so likeauth try_first_pass
     auth required ${pkgs.pam}/lib/security/pam_deny.so
