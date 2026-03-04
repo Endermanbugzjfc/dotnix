@@ -1,7 +1,7 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     entr # Re-run command when file changes.
-    (writeShelScriptBin "mv-swap" ''
+    (writeShellScriptBin "mv-swap" ''
       [ "$#" != "2" ] && echo "Please enter exactly two paths" && exit 1
       path_one="$1"
       path_two="$2"
@@ -25,7 +25,7 @@
   programs.nushell = {
     enable = true;
 
-    settings.edit_mode = "vi":
+    settings.edit_mode = "vi";
     settings.history.sync_on_enter = false; # Disable shared history.
 
     shellAliases = {
@@ -33,7 +33,7 @@
       fg = "job unfreeze";
       f = "job list";
       e = "enter";
-      ssh = "kitty +kitten ssh"
+      ssh = "kitty +kitten ssh";
     } // (let
       isTty = "[ \"$XDG_SESSION_TYPE\" == \"tty\" ]";
     in {

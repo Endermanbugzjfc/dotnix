@@ -48,7 +48,9 @@ in {
   ];
 
   wayland.windowManager.hyprland.enable = true;
-  # wayland.windowManager.hyprland.package = inputs.hyprland.packages.${pkgs.system}.hyprland; # TODO
+  # wayland.windowManager.hyprland.package = let
+  #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+  # in package;
 
   wayland.windowManager.hyprland.plugins = with pkgs.hyprlandPlugins; [
     # hypr-dynamic-cursors
@@ -58,8 +60,11 @@ in {
   wayland.windowManager.hyprland.settings = {
     inherit monitor;
     misc.disable_hyprland_logo = "true"; # Brought my own anime girl.
-    exec-once = "waypaper --random &";
-    general.gaps_out = "0";
+    exec-once = "waypaper --random &"; # Animation: set imperatively in Waypaper GUI.
+
+    general.gaps_out = "5";
+    decoration.rounding = 5;
+    general.layout = "scrolling";
 
     "plugin:dynamic-cursors" = {
       mode = "stretch";
