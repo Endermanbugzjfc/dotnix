@@ -29,63 +29,27 @@ in {
 
     hyprpicker
     waypaper
+    (writeShellScriptBin "hyprdoc" ''
+      xdg-open https://wiki.hypr.land/
+    '')
 
     hyprland-qt-support
     inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     vlc
+
+    # Reminder: VLC is an unsafe protocol:
     wlvncc
 
     # I never liked desktop notifications but Plover depends on notify-send:
     libnotify
+
+    qalculate-gtk
   ];
 
   wayland.windowManager.hyprland.enable = true;
-  # wayland.windowManager.hyprland.package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-  nixpkgs.overlays = [
-# https://github.com/KZDKM/Hyprspace/pull/200#issuecomment-3503786991
-  (
-self: super:
-{
-  hyprlandPlugins = super.hyprlandPlugins // {
-    hyprspace = super.hyprlandPlugins.hyprspace.overrideAttrs (oldAttrs: {
-      # Fix compatibility with Hyprland 0.51.x
-      # Based on PR #200: https://github.com/KZDKM/Hyprspace/pull/200
-      # Updates dispatcher API from V1 to V2 and fixes type casting issues
-      postPatch = (oldAttrs.postPatch or "") + ''
+  # wayland.windowManager.hyprland.package = inputs.hyprland.packages.${pkgs.system}.hyprland; # TODO
 
-        # Update dispatcher API to V2
-        substituteInPlace src/main.cpp \
-          --replace-fail 'HyprlandAPI::addDispatcher(pHandle, "overview:toggle"' \
-                         'HyprlandAPI::addDispatcherV2(pHandle, "overview:toggle"' \
-          --replace-fail 'HyprlandAPI::addDispatcher(pHandle, "overview:open"' \
-                         'HyprlandAPI::addDispatcherV2(pHandle, "overview:open"' \
-          --replace-fail 'HyprlandAPI::addDispatcher(pHandle, "overview:close"' \
-                         'HyprlandAPI::addDispatcherV2(pHandle, "overview:close"'
-
-        # Fix type casting issue in Render.cpp for panelBorderWidth
-        substituteInPlace src/Render.cpp \
-          --replace-fail 'owner->m_transformedSize.x, Config::panelBorderWidth};' \
-                         'owner->m_transformedSize.x, static_cast<double>(Config::panelBorderWidth)};'
-
-        # Fix Input.cpp to handle createNewWorkspace return value (nodiscard in 0.51)
-        # This captures the return value to avoid compiler warnings/errors
-        # Replace both occurrences on lines 92 and 97
-        sed -i 's/if (g_pCompositor->getWorkspaceByID(wsIDName.id) == nullptr) g_pCompositor->createNewWorkspace(wsIDName.id, ownerID);/if (g_pCompositor->getWorkspaceByID(wsIDName.id) == nullptr) { auto ws = g_pCompositor->createNewWorkspace(wsIDName.id, ownerID); (void)ws; }/g' src/Input.cpp
-
-        # Fix gesture handling for Hyprland 0.51 - the old gesture config options were removed
-        # Use default values (4 fingers, 300 distance) when the old config doesn't exist
-        substituteInPlace src/Input.cpp \
-          --replace-fail 'int fingers = std::any_cast<Hyprlang::INT>(HyprlandAPI::getConfigValue(pHandle, "gestures:workspace_swipe_fingers")->getValue());' \
-                         'auto fingersConfig = HyprlandAPI::getConfigValue(pHandle, "gestures:workspace_swipe_fingers"); int fingers = fingersConfig ? std::any_cast<Hyprlang::INT>(fingersConfig->getValue()) : 4;' \
-          --replace-fail 'int distance = std::any_cast<Hyprlang::INT>(HyprlandAPI::getConfigValue(pHandle, "gestures:workspace_swipe_distance")->getValue());' \
-                         'auto distanceConfig = HyprlandAPI::getConfigValue(pHandle, "gestures:workspace_swipe_distance"); int distance = distanceConfig ? std::any_cast<Hyprlang::INT>(distanceConfig->getValue()) : 300;'
-      '';
-    });
-  };
-}
-  )
-  ];
   wayland.windowManager.hyprland.plugins = with pkgs.hyprlandPlugins; [
     # hypr-dynamic-cursors
     # hyprspace
@@ -139,6 +103,8 @@ self: super:
       "fullscreen on, match:class discord match:title .+"
       "no_initial_focus on, match:class steam title:.+"
       "stay_focused on, match:class org.gnupg.pinentry-qt"
+
+      "float on, match:class qalculate-gtk"
     ];
 
     # TODO: run nix flake update on idle or lock
@@ -181,6 +147,8 @@ self: super:
       "SHIFT, Print, ${selectAndShoot}"
 
       #"\$mainMod, w, overview:toggle"
+
+      "\$mainMod SHIFT, q, exec, qalculate-gtk"
     ];
 
     bindm = [

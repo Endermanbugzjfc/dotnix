@@ -1,9 +1,10 @@
-{
+{ pkgs, ... }: {
 # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
   # boot.loader.grub = {
-  #   #enable = true;
-  #   enable = false;
+  #   enable = true;
   #   useOSProber = true;
   #   efiSupport = true;
   #   fsIdentifier = "label";
@@ -12,12 +13,12 @@
   #     menuentry "Reboot" {
   #       reboot
   #     }
-  #   menuentry "Poweroff" {
-  #     halt
-  #   }
+  #     menuentry "Poweroff" {
+  #       halt
+  #     }
   #   '';
+  #   theme = "${pkgs.kdePackages.breeze-grub}/grub/themes/breeze";
   # };
-  boot.loader.efi.canTouchEfiVariables = true;
 
 
 # # https://nixos.wiki/wiki/Hibernation
