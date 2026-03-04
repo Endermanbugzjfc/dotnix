@@ -5,4 +5,6 @@
     parsec-bin
     moonlight-qt
   ];
+
+  programs.nushell.environmentVariables.CSE = "z5667590@login0.unsw.edu.au"
 }
