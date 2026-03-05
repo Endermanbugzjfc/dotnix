@@ -142,6 +142,8 @@ in {
       "\$mainMod SHIFT, j, movewindow, d"
 
       "\$mainMod, f, fullscreen"
+      "\$mainMod, g, fullscreenstate, -1, 3"
+
 
       "\$mainMod ALT, up, exec, hyprland-toggle-upside-down"
       "\$mainMod, l, exec, hyprlock"
