@@ -16,6 +16,11 @@
       enable_audio_bell = false;
       background_opacity = 0.9;
       dynamic_backgronud_opacity = true;
+      touch_scroll_multiplier = 10.0;
+    };
+    keybindings = {
+      "ctrl+alt+n" = "new_os_window_with_cwd";
+      "ctrl+alt+t" = "new_tab_with_cwd";
     };
   };
 }

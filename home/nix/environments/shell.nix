@@ -27,6 +27,21 @@
 
     settings.edit_mode = "vi";
     settings.history.sync_on_enter = false; # Disable shared history.
+    settings.keybindings = let
+      fg = {
+        name = "fg_on_ctrl_z";
+        modifier = "control";
+        keycode = "char_z";
+        event = {
+          send = "executehostcommand";
+          cmd =  "job unfreeze | ignore";
+        };
+      };
+    in [
+      (fg // { mode = "vi_insert"; })
+      (fg // { mode = "vi_normal"; })
+      (fg // { mode = "emacs"; })
+    ];
 
     shellAliases = {
       please = "sudo";
