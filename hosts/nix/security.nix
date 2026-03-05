@@ -1,4 +1,4 @@
-{ lib, pkgs, inputs, ...}: {
+{ config, lib, pkgs, inputs, ...}: {
   environment.systemPackages = with pkgs; [
     keybase-gui
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -19,7 +19,18 @@
   };
 
   # Use different password for login and sudo:
-  security.pam.services.sudo.text = let
+  # environment.etc.test.text = builtins.toJSON config.security.services.sudo.text;
+
+  # Note: `rules` is an experimental and hidden option.
+  # https://github.com/NixOS/nixpkgs/blob/fabb8c9deee281e50b1065002c9828f2cf7b2239/nixos/modules/security/pam.nix#L154
+  # environment.etc.test.text = builtins.toJSON (
+  #   lib.mapAttrs' (k: v: {
+  #     name = k;
+  #     value = v.enable;
+  #   }) config.security.pam.services.sudo.rules.auth
+  # );
+
+  security.pam.services.sudo.rules.auth.sudo-short-password = let
     dbKV = pkgs.writeText "dbKV" ''
       rickastley
       00
@@ -31,25 +42,14 @@
       mkdir $out
       $db48/bin/db_load -T -t hash -f ${dbKV} $out/pass.db
     '';
-  in lib.mkForce ''
-    # Account management.
-    account required ${pkgs.pam}/lib/security/pam_unix.so
 
-    # Authentication management.
-    # Do NOT suffix the .db file extension name after "/pass":
-    auth sufficient ${pkgs.pam}/lib/security/pam_userdb.so db=${passDb}/pass
-    auth sufficient ${pkgs.pam}/lib/security/pam_unix.so likeauth try_first_pass
-    auth required ${pkgs.pam}/lib/security/pam_deny.so
-
-    # Password management.
-    password sufficient ${pkgs.pam}/lib/security/pam_unix.so nullok yescrypt
-
-    # Session management.
-    session required ${pkgs.pam}/lib/security/pam_env.so conffile=/etc/pam/environment readenv=0
-    session required ${pkgs.pam}/lib/security/pam_unix.so
-    session required ${pkgs.pam}/lib/security/pam_limits.so conf=/nix/store/i421b3fnrslb9vq18507qyll4h5qjkkz-limits.conf
-  '';
-
+    followingRule = config.security.pam.services.sudo.rules.auth.unix;
+  in {
+    order = followingRule.order - 10;
+    control = "sufficient";
+    modulePath = "${pkgs.pam}/lib/security/pam_userdb.so";
+    settings.db = "${passDb}/pass";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are started in user sessions. programs.mtr.enable = true;
 }
