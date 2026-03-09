@@ -5,5 +5,6 @@
     ./rust.nix
     ./nim.nix
     ./nix.nix
+    ./js.nix
   ];
 }
