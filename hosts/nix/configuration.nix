@@ -34,6 +34,16 @@
     LC_TIME = "en_AU.UTF-8";
   };
 
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+    fcitx5.waylandFrontend = true;
+    fcitx5.addons = with pkgs; [
+      rime-data
+      fcitx5-gtk
+      fcitx5-rime
+    ];
+  };
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
