@@ -6,5 +6,6 @@
     ./nim.nix
     ./nix.nix
     ./js.nix
+    ./php.nix
   ];
 }

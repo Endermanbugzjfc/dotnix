@@ -144,7 +144,6 @@ in {
       "\$mainMod, f, fullscreen"
       "\$mainMod, g, fullscreenstate, -1, 3"
 
-
       "\$mainMod ALT, up, exec, hyprland-toggle-upside-down"
       "\$mainMod, l, exec, hyprlock"
 
@@ -155,7 +154,7 @@ in {
 
       #"\$mainMod, w, overview:toggle"
 
-      "\$mainMod SHIFT, q, exec, qalculate-gtk"
+      "\$mainMod SHIFT, t, exec, qalculate-gtk"
     ];
 
     bindm = [

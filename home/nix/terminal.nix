@@ -1,6 +1,7 @@
 # Kitty terminal and kitten utilities.
 
 { lib, pkgs, ... }: {
+  wayland.windowManager.hyprland.settings."\$terminal" = "kitty --single-instance";
   programs.kitty = lib.mkForce {
     enable = true;
     package = let
@@ -21,6 +22,7 @@
     keybindings = {
       "ctrl+alt+n" = "new_os_window_with_cwd";
       "ctrl+alt+t" = "new_tab_with_cwd";
+      "ctrl+shift+m" = "detach_window ask";
     };
   };
 }
