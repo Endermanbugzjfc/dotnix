@@ -64,12 +64,22 @@ in {
 
     general.gaps_out = "5";
     decoration.rounding = 5;
-    general.layout = "scrolling";
 
     "plugin:dynamic-cursors" = {
       mode = "stretch";
       # shake.effects = "true";
       hyprcursor.resolution = "512";
+    };
+
+    # Official scorlling layout added on 0.54:
+    general.layout = "scrolling";
+    scrolling = let
+      golden_reciprocal = "0.618";
+    in {
+      column_width = golden_reciprocal;
+      # Options in Hyprland latest-git:
+      # wrap_focus=false
+      # wrap_swapcol=false
     };
 
     # Fix apps that do not follow NIXOS_OZONE_WL:
@@ -80,6 +90,8 @@ in {
     gesture = [
       "3, swipe, resize"
       # "4, down, overview:toggle"
+      # gesture = 3, left, dispatcher, movefocus, l   gesture = 3, right, dispatcher, movefocus, r
+      # https://www.reddit.com/r/hyprland/comments/1rkhwar/change_focus_windows_with_gesture/
     ];
 
     # hyprexpo-gesture = [
@@ -154,7 +166,7 @@ in {
 
       #"\$mainMod, w, overview:toggle"
 
-      "\$mainMod SHIFT, t, exec, qalculate-gtk"
+      "\$mainMod, t, exec, qalculate-gtk"
     ];
 
     bindm = [
