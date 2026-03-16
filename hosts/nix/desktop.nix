@@ -15,12 +15,12 @@
     nerd-fonts.noto
     source-han-sans
   ];
-  systemd.sleep.extraConfig = ''
-      AllowHybridSleep=no
-      AllowSuspendThenHibernate=yes
-      HibernateDelaySec=30m
-      SuspendState=mem
-    ''; # TODO: variable hibnerate delay based on power supply mode.
+  # systemd.sleep.extraConfig = ''
+  #     AllowHybridSleep=no
+  #     AllowSuspendThenHibernate=yes
+  #     HibernateDelaySec=30m
+  #     SuspendState=mem
+  #   ''; # TODO: variable hibnerate delay based on power supply mode.
   services.logind = {
   };
   services.logind.settings.Login = {
