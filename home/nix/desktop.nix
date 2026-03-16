@@ -5,6 +5,9 @@
   # Experiment log 2025-11-08: Citrix Workspace scaling works with static
   # monitor config, but not dynamic. And the interface is so blurry so I should
   # just stay with the current setup.
+
+  golden_reciprocal = "0.618";
+  column_width = golden_reciprocal;
 in {
   home.packages = with pkgs; [
     grim  # Screenshot.
@@ -73,10 +76,8 @@ in {
 
     # Official scorlling layout added on 0.54:
     general.layout = "scrolling";
-    scrolling = let
-      golden_reciprocal = "0.618";
-    in {
-      column_width = golden_reciprocal;
+    scrolling = {
+      inherit column_width;
       # Options in Hyprland latest-git:
       # wrap_focus=false
       # wrap_swapcol=false
@@ -122,6 +123,7 @@ in {
       "stay_focused on, match:class org.gnupg.pinentry-qt"
 
       "float on, match:class qalculate-gtk"
+      "move cursor -50% -50%, match:class qalculate-gtk"
     ];
 
     # TODO: run nix flake update on idle or lock
@@ -142,32 +144,42 @@ in {
 
     bind = let
       selectAndShoot = "exec, grim -g \"$(slurp)\" - | wl-copy";
-    in [
-      "\$mainMod ALT, h, movefocus, l"
-      "\$mainMod ALT, l, movefocus, r"
-      "\$mainMod ALT, k, movefocus, u"
-      "\$mainMod ALT, j, movefocus, d"
+      binds = [
+        "\$mainMod ALT, h, movefocus, l"
+        "\$mainMod ALT, l, movefocus, r"
+        "\$mainMod ALT, k, movefocus, u"
+        "\$mainMod ALT, j, movefocus, d"
 
-      "\$mainMod SHIFT, h, movewindow, l"
-      "\$mainMod SHIFT, l, movewindow, r"
-      "\$mainMod SHIFT, k, movewindow, u"
-      "\$mainMod SHIFT, j, movewindow, d"
+        "\$mainMod SHIFT, h, layoutmsg, swapcol l"
+        "\$mainMod SHIFT, l, layoutmsg, swapcol r"
+        "\$mainMod SHIFT, k, movewindow, u"
+        "\$mainMod SHIFT, j, movewindow, d"
 
-      "\$mainMod, f, fullscreen"
-      "\$mainMod, g, fullscreenstate, -1, 3"
+        # Make this three-finger tap when Hyprland supports it in the future:
+        "\$mainMod SHIFT, equal, layoutmsg, colresize ${column_width}"
 
-      "\$mainMod ALT, up, exec, hyprland-toggle-upside-down"
-      "\$mainMod, l, exec, hyprlock"
+        "\$mainMod, f, fullscreen"
+        "\$mainMod, g, fullscreenstate, -1, 3"
 
-      "\$mainMod SHIFT, c, exec, hyprpicker | grep -oE \"##(.+)\" | tr -d \"[:space:]\" | wl-copy"
-      # "\$mainMod SHIFT, t, exec, "
-      ", Print, exec, grim - | wl-copy"
-      "SHIFT, Print, ${selectAndShoot}"
+        "\$mainMod ALT, up, exec, hyprland-toggle-upside-down"
+        "\$mainMod, l, exec, hyprlock"
 
-      #"\$mainMod, w, overview:toggle"
+        "\$mainMod SHIFT, c, exec, hyprpicker | grep -oE \"##(.+)\" | tr -d \"[:space:]\" | wl-copy"
+        # "\$mainMod SHIFT, t, exec, "
+        ", Print, exec, grim - | wl-copy"
+        "SHIFT, Print, ${selectAndShoot}"
 
-      "\$mainMod, t, exec, qalculate-gtk"
-    ];
+        #"\$mainMod, w, overview:toggle"
+
+        "\$mainMod, t, exec, ${focusQalculate}"
+      ];
+
+      focusQalculate = pkgs.writeShellScript "focus-qalculate" ''
+        [ "$(pidof qalculate-gtk)" == "" ] && qalculate-gtk && exit 0
+        hyprctl dispatch movetoworkspace +0, "class:^(qalculate-gtk)$"
+        hyprctl dispatch movewindowpixel "exact $(hyprctl cursorpos | sed 's/,//' | awk '{print int($1/2),int($2/2)}'),class:^(qalculate-gtk)$"
+      '';
+    in binds;
 
     bindm = [
       "\$mainMod ALT, mouse:272, resizewindow"
