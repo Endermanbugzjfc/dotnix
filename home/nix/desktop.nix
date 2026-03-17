@@ -78,6 +78,7 @@ in {
     general.layout = "scrolling";
     scrolling = {
       inherit column_width;
+      fullscreen_on_one_column = false;
       # Options in Hyprland latest-git:
       # wrap_focus=false
       # wrap_swapcol=false
@@ -89,9 +90,10 @@ in {
     # xwayland.force_zero_scaling = "false";
 
     gesture = [
-      "3, swipe, resize"
+      # "3, swipe, resize"
       # "4, down, overview:toggle"
-      # gesture = 3, left, dispatcher, movefocus, l   gesture = 3, right, dispatcher, movefocus, r
+      "3, left, dispatcher, movefocus, r"
+      "3, right, dispatcher, movefocus, l"
       # https://www.reddit.com/r/hyprland/comments/1rkhwar/change_focus_windows_with_gesture/
     ];
 
@@ -156,7 +158,8 @@ in {
         "\$mainMod SHIFT, j, movewindow, d"
 
         # Make this three-finger tap when Hyprland supports it in the future:
-        "\$mainMod SHIFT, equal, layoutmsg, colresize ${column_width}"
+        "\$mainMod, Delete, layoutmsg, colresize 1"
+        "\$mainMod, Backspace, layoutmsg, colresize ${column_width}"
 
         "\$mainMod, f, fullscreen"
         "\$mainMod, g, fullscreenstate, -1, 3"
@@ -175,9 +178,13 @@ in {
       ];
 
       focusQalculate = pkgs.writeShellScript "focus-qalculate" ''
+        #!/bin/bash
         [ "$(pidof qalculate-gtk)" == "" ] && qalculate-gtk && exit 0
         hyprctl dispatch movetoworkspace +0, "class:^(qalculate-gtk)$"
-        hyprctl dispatch movewindowpixel "exact $(hyprctl cursorpos | sed 's/,//' | awk '{print int($1/2),int($2/2)}'),class:^(qalculate-gtk)$"
+        SIZES=$(hyprctl clients -j | jq -r '.[] | select(.class == "qalculate-gtk") | .size | "\(.[0]) \(.[1])"')
+        CURSOR=$(hyprctl cursorpos | sed 's/,//')
+        EXACT=$(printf "$CURSOR $SIZES" | awk '{print int($1-$3/2),int($2-$4/2)}')
+        hyprctl dispatch movewindowpixel "exact $EXACT,class:^(qalculate-gtk)$"
       '';
     in binds;
 
