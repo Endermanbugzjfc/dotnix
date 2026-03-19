@@ -1,7 +1,16 @@
-{ pkgs, ... }: {
-  home.packages = with pkgs; [
-    entr # Re-run command when file changes.
-    (writeShellScriptBin "mv-swap" ''
+{ config, pkgs, ... }: {
+  home.packages = let
+    ps = with pkgs; [
+      entr # Re-run command when file changes.
+      mv-swap
+      file  # Linux `file` command (filetype checker).
+      ascii
+    ];
+    ps-locked = [
+      # `less` seems to be broken on NixOS/Nixpkgs Kitty Terminal.
+      config.lib.pkgs-25_05.less
+    ];
+    mv-swap = pkgs.writeShellScriptBin "mv-swap" ''
       [ "$#" != "2" ] && echo "Please enter exactly two paths" && exit 1
       path_one="$1"
       path_two="$2"
@@ -15,8 +24,8 @@
       mv "$path_one" "$shunt"
       mv "$path_two" "$path_one"
       mv "$shunt" "$path_two"
-    '')
-  ];
+    '';
+  in ps ++ ps-locked;
 
   home.shell = {
     enableNushellIntegration = true;

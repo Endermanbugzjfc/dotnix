@@ -79,6 +79,10 @@ in {
     scrolling = {
       inherit column_width;
       fullscreen_on_one_column = false;
+      focus_fit_method = let
+        centre = "0"; # Option name: center.
+        fit = "1";
+      in centre;
       # Options in Hyprland latest-git:
       # wrap_focus=false
       # wrap_swapcol=false
