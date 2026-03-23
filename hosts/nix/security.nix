@@ -51,6 +51,13 @@
     settings.db = "${passDb}/pass";
   };
 
+  # Hardware security for HIDRAW:
+  # Allows lim.au to access the Polyglot keyboard:
+  # boot.initrd.services.udev.rules = ''
+  services.udev.extraRules = ''
+    SUBSYSTEM=="hidraw", KERNELS=="*:9000:400D.*", MODE="0666"
+  '';
+
   # Some programs need SUID wrappers, can be configured further or are started in user sessions. programs.mtr.enable = true;
 }
   # Open ports in the firewall.

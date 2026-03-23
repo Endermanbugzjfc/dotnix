@@ -7,6 +7,7 @@
   # just stay with the current setup.
 
   golden_reciprocal = "0.618";
+  thin_column_width = "0.382";
   column_width = golden_reciprocal;
 in {
   home.packages = with pkgs; [
@@ -96,8 +97,8 @@ in {
     gesture = [
       # "3, swipe, resize"
       # "4, down, overview:toggle"
-      "3, left, dispatcher, movefocus, r"
-      "3, right, dispatcher, movefocus, l"
+      "3, left, dispatcher, layoutmsg, r"
+      "3, right, dispatcher, layoutmsg, l"
       # https://www.reddit.com/r/hyprland/comments/1rkhwar/change_focus_windows_with_gesture/
     ];
 
@@ -164,6 +165,7 @@ in {
         # Make this three-finger tap when Hyprland supports it in the future:
         "\$mainMod, Delete, layoutmsg, colresize 1"
         "\$mainMod, Backspace, layoutmsg, colresize ${column_width}"
+        "\$mainMod, Insert, layoutmsg, colresize ${thin_column_width}"
 
         "\$mainMod, f, fullscreen"
         "\$mainMod, g, fullscreenstate, -1, 3"
