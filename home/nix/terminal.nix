@@ -18,10 +18,24 @@
       dynamic_backgronud_opacity = true;
       touch_scroll_multiplier = 10.0;
     };
-    keybindings = {
-      "ctrl+alt+n" = "new_os_window_with_cwd";
-      "ctrl+alt+t" = "new_tab_with_cwd";
-      "ctrl+shift+m" = "detach_window ask";
-    };
+    keybindings = let
+      binds = lib.mergeAttrsList ([{
+        "ctrl+alt+n" = "new_os_window_with_cwd";
+        "ctrl+alt+t" = "new_tab_with_cwd";
+        "kitty_mod+m" = "detach_window ask";
+        "kitty_mod_w" = "no_op";
+      }] ++ copyBinds);
+      copyBinds = [
+        (mkCopyBind "p" "path")
+        (mkCopyBind "w" "word")
+        (mkCopyBind "l" "line")
+        (mkCopyBind "h" "hash")
+        (mkCopyBind "n" "linenum")
+        (mkCopyBind "y" "hyperlink")
+      ];
+      mkCopyBind = key: type: {
+        "kitty_mod+y>${key}" = "kitten hints --type ${type} --program wl-copy";
+      };
+    in binds;
   };
 }

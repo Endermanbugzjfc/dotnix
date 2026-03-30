@@ -26,6 +26,9 @@ in {
       fi
       exec $PREP
     '')
+    (writeShellScriptBin "nodim" ''
+      hyprctl keyword decoration:dim_special 0
+    '')
     (let
       plugins = config.wayland.windowManager.hyprland.plugins;
       lines = lib.forEach plugins (plugin: "hyprctl plugin unload ${plugin}/lib/lib${plugin.pname}.so");
@@ -97,8 +100,8 @@ in {
     gesture = [
       # "3, swipe, resize"
       # "4, down, overview:toggle"
-      "3, left, dispatcher, layoutmsg, r"
-      "3, right, dispatcher, layoutmsg, l"
+      "3, left, dispatcher, movefocus, r"
+      "3, right, dispatcher, movefocus, l"
       # https://www.reddit.com/r/hyprland/comments/1rkhwar/change_focus_windows_with_gesture/
     ];
 
