@@ -11,6 +11,8 @@
   column_width = golden_reciprocal;
 in {
   home.packages = with pkgs; [
+    pyprland
+
     grim  # Screenshot.
     slurp # Screen region selection.
     satty # Annotation tool
@@ -184,6 +186,16 @@ in {
         #"\$mainMod, w, overview:toggle"
 
         "\$mainMod, t, exec, ${focusQalculate}"
+
+        # Note: macos Exposé: control+down / Command+F3 according to ||Gemini||.
+        "\$mainMod, k, exec, pypr expose"
+
+        "\$mainMod, h, exec, pypr layout_center toggle # toggle the layout"
+## focus change keys
+        "\$mainMod, left, exec, pypr layout_center prev"
+        "\$mainMod, right, exec, pypr layout_center next"
+        "\$mainMod, up, exec, pypr layout_center prev2"
+        "\$mainMod, down, exec, pypr layout_center next2"
       ];
 
       focusQalculate = pkgs.writeShellScript "focus-qalculate" ''
@@ -251,4 +263,45 @@ in {
   services.dunst.enable = true;
 
   # TODO: notify on OCR script
+
+  # Pyprland:
+  systemd.user.services.pyprland = {
+    Unit = {
+      Description = "Starts pyprland daemon";
+      After = [ "graphical-session.target" ];
+      Wants = [ "graphical-session.target" ];
+      StartLimitIntervalSec = 600;
+      StartLimitBurst = 5;
+    };
+
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.pyprland}/bin/pypr";
+      Restart = "always";
+    };
+
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+  wayland.windowManager.hyprland.settings.workspace = [
+    # Add some style to the "exposed" workspace
+    "special:exposed,gapsout:60,gapsin:30,bordersize:5,border:true,shadow:false"
+  ];
+
+  home.file.".config/pypr/config.toml".text = ''
+    [pyprland]
+    plugins = [
+        "expose",
+        "layout_center"
+    ]
+
+    [layout_center]
+    margin = 60
+    offset = [0, 30]
+    next = "movefocus r"
+    prev = "movefocus l"
+    next2 = "movefocus d"
+    prev2 = "movefocus u"
+  '';
 }

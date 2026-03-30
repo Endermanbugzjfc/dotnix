@@ -23,7 +23,7 @@
         "ctrl+alt+n" = "new_os_window_with_cwd";
         "ctrl+alt+t" = "new_tab_with_cwd";
         "kitty_mod+m" = "detach_window ask";
-        "kitty_mod_w" = "no_op";
+        "kitty_mod+w" = "no_op";
       }] ++ copyBinds);
       copyBinds = [
         (mkCopyBind "p" "path")
