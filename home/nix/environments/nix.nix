@@ -1,4 +1,32 @@
-{ inputs, pkgs, ... }: {
+{ config, inputs, pkgs, ... }: {
+  lib = with pkgs; let
+    flake-template-top = writeText "flake.nix.a" ''
+      {
+        inputs = {
+          flake-utils.url = "github:numtide/flake-utils";
+          nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+        };
+
+        outputs = inputs:
+          inputs.flake-utils.lib.eachDefaultSystem (system:
+            let
+              pkgs = (import (inputs.nixpkgs) { inherit system; });
+            in {
+              devShell = pkgs.mkShellNoCC {
+                packages = with pkgs; [
+    '';
+    flake-template-bottom = writeText "flake.nix.b" ''
+                ];
+              };
+            }
+          );
+      }
+    '';
+  in {
+    inherit flake-template-top flake-template-bottom;
+  };
+
+
   home.packages = let
     ps = with pkgs; [
       nh
@@ -22,33 +50,10 @@
         "https://github.com/nixos/nixpkgs/tarball/nixpkgs-unstable"
       ) {}'
     '';
-    flake-init = with pkgs; let
-      flake-template-top = writeText "flake.nix.a" ''
-        {
-          inputs = {
-            flake-utils.url = "github:numtide/flake-utils";
-            nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-          };
-
-          outputs = inputs:
-            inputs.flake-utils.lib.eachDefaultSystem (system:
-              let
-                pkgs = (import (inputs.nixpkgs) { inherit system; });
-              in {
-                devShell = pkgs.mkShellNoCC {
-                  packages = with pkgs; [
-      '';
-      flake-template-bottom = writeText "flake.nix.b" ''
-                  ];
-                };
-              }
-            );
-        }
-      '';
-    in writeShellScriptBin "flake-init" ''
-      cat ${flake-template-top} >> flake.nix
+    flake-init = pkgs.writeShellScriptBin "flake-init" ''
+      cat ${config.lib.flake-template-top} >> flake.nix
       echo "            $*" >> flake.nix
-      cat ${flake-template-bottom} >> flake.nix
+      cat ${config.lib.flake-template-bottom} >> flake.nix
 
       git add ./flake.nix
       echo "use flake" >> .envrc
