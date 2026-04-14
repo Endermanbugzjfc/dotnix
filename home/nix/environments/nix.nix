@@ -5,12 +5,13 @@
         inputs = {
           flake-utils.url = "github:numtide/flake-utils";
           nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+          nixche.url = "github:ezjfc/nixche";
         };
 
         outputs = inputs:
           inputs.flake-utils.lib.eachDefaultSystem (system:
             let
-              pkgs = (import (inputs.nixpkgs) { inherit system; });
+              pkgs = inputs.nixpkgs.legacyPackages.''${system};
             in {
               devShell = pkgs.mkShellNoCC {
                 packages = with pkgs; [
@@ -22,8 +23,59 @@
           );
       }
     '';
+    flake-lsp-os = writeText "flake.nix.c" ''
+      {
+        inputs = {
+          flake-utils.url = "github:numtide/flake-utils";
+          nixpkgs.url = ${inputs.nixpkgs};
+          nixche.url = "github:ezjfc/nixche";
+        };
+
+        outputs = inputs:
+          inputs.flake-utils.lib.eachDefaultSystem (system:
+            let
+              overlay = inputs.nixche.overlays.nvim-with-lsps;
+              pkgs = inputs.nixpkgs.legacyPackages.''${system}.extend overlay;
+            in {
+              devShell = pkgs.mkShellNoCC {
+                packages = with pkgs; [
+                  (neovim.withLsps {
+
+    '';
+    flake-lsp-top = writeText "flake.nix.d" ''
+      {
+        inputs = {
+          flake-utils.url = "github:numtide/flake-utils";
+          nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+          nixche.url = "github:ezjfc/nixche";
+        };
+
+        outputs = inputs:
+          inputs.flake-utils.lib.eachDefaultSystem (system:
+            let
+              overlay = inputs.nixche.overlays.nvim-with-lsps;
+              pkgs = inputs.nixpkgs.legacyPackages.''${system}.extend overlay;
+            in {
+              devShell = pkgs.mkShellNoCC {
+                packages = with pkgs; [
+                  (neovim.withLsps {
+
+    '';
+    flake-lsp-middle = writeText "flake.nix.e" "            })\n";
+    flake-lsp-bottom = writeText "flake.nix.f" ''
+                ];
+              };
+            }
+          );
+      }
+    '';
   in {
-    inherit flake-template-top flake-template-bottom;
+    inherit flake-template-top
+            flake-template-bottom
+            flake-lsp-os
+            flake-lsp-top
+            flake-lsp-middle
+            flake-lsp-bottom;
   };
 
 
@@ -51,13 +103,76 @@
       ) {}'
     '';
     flake-init = pkgs.writeShellScriptBin "flake-init" ''
-      cat ${config.lib.flake-template-top} >> flake.nix
-      echo "            $*" >> flake.nix
-      cat ${config.lib.flake-template-bottom} >> flake.nix
-
-      git add ./flake.nix
-      echo "use flake" >> .envrc
-      direnv allow
     '';
   in ps;
+
+  programs.nushell.configFile.text = let
+    cmds = ''
+      ${flake-init}
+    '';
+      # ${flake-lsp}
+    flake-init = ''
+      def "flake init" [
+        --packages (-p): string = "",
+        --dry,
+      ] {
+        mut expr = "";
+        $expr += (cat ${config.lib.flake-template-top})
+        $expr += $"            ($packages)"
+        $expr += (cat ${config.lib.flake-template-bottom})
+        echo $expr
+        if ($dry) {
+          print $expr
+          return
+        }
+
+        if ("flake.nix" | path exists | not $in) {
+          $expr | save flake.nix
+          git add flake.nix
+          print "Created and staged flake.nix"
+        } else {
+          panic "flake.nix already exists"
+        }
+
+        if (".envrc" | path exists | not $in) {
+          print "use flake" | save .envrc
+          git add .envrc
+
+          print "Created and staged .envrc"
+          direnv allow
+        } # Not really cares if .envrc exists
+      }
+    '';
+    # flake-lsp = ''
+    #   def "flake lsp" [
+    #     --lsp: table<name: string, package: string> = [],
+    #     --packages (-p): string = "",
+    #     --dry,
+    #     --use-nixpkgs-unstable,
+    #   ] {
+    #     mut expr = ""
+    #     if ($use_nixpkgs_unstable) {
+    #       $expr += (cat ${config.lib.flake-lsp-top})
+    #     } else {
+    #       $expr += (cat ${config.lib.flake-lsp-os})
+    #     }
+    #
+    #     for server in $lsp {
+    #       $expr += $"              \"($server.name)\" = ";
+    #       $expr += $"($server.package);\n"
+    #     }
+    #     $expr += (cat ${config.lib.flake-lsp-middle})
+    #     $expr += $"($packages)\n"
+    #     $expr += (cat ${config.lib.flake-lsp-bottom})
+    #
+    #     echo $expr
+    #     print $expr
+    #     if (not $dry) {
+    #       let tmp = (mktemp -d -p ~/Run)
+    #       $expr | save $"($tmp)/flake.nix"
+    #       nix develop $tmp
+    #     }
+    #   }
+    # '';
+  in cmds;
 }
