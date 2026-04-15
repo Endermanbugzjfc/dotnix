@@ -1,4 +1,19 @@
-{ config, pkgs, ... }: {
+{ config, lib, pkgs, ... }: {
+  options.subcommands = with lib; let
+    opts = { name, ... }: {
+      options = {
+        name = mkOption {
+          type = with types; str;
+          default = name;
+        };
+
+        # Note: reserved for forward compatibility.
+      };
+    };
+  in mkOption {
+    type = with types; attrsOf (submodule opts);
+  };
+} // { config = {
   home.packages = let
     ps = with pkgs; [
       entr # Re-run command when file changes.
@@ -65,19 +80,29 @@
       k = "bash -c '${isTty} && startplasma-wayland'";
     });
     loginFile.text = "h";
-    configFile.text = ''
-      use std/dirs # Replacement for pushd, popd
-      use std/dirs shells-aliases *
+    configFile.text = let
+      main = ''
+        use std/dirs # Replacement for pushd, popd
+        use std/dirs shells-aliases *
 
-      ln -sf /run/user/1000 ~/Run
+        ln -sf /run/user/1000 ~/Run
 
-      # Actualise link:
-      def aln [symlink: path] {
-        let real = (readlink -f $symlink)
-        mv $symlink $".($symlink)"
-        cat $real o> $symlink
-      }
-    '';
+        # Actualise link:
+        def aln [symlink: path] {
+          let real = (readlink -f $symlink)
+          mv $symlink $".($symlink)"
+          cat $real o> $symlink
+        }
+
+        ${lib.concatStringsSep "\n" subcommand-listers}
+      '';
+      cfg = config.subcommands;
+      subcommand-listers = lib.mapAttrsToList (name': opts: ''
+        def ${opts.name} [] {
+          help commands | where name starts-with ${opts.name}
+        }
+      '') cfg;
+    in main;
       # let chrome_open = "~/Run/feat/chrome-open"
       # mkdir $chrome_open
       # job spawn { job spawn { glob $"($chrome_open)/*" | str join "\n" | entr -r "google-chrome-stable " } }
@@ -111,4 +136,5 @@
     enableNushellIntegration = true;
   };
   programs.direnv.nix-direnv.enable = true;
+};
 }

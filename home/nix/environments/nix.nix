@@ -106,11 +106,12 @@
     '';
   in ps;
 
+  subcommands.flake = {};
   programs.nushell.configFile.text = let
     cmds = ''
       ${flake-init}
     '';
-      # ${flake-lsp}
+    # TODO: lsps and nixche
     flake-init = ''
       def "flake init" [
         --packages (-p): string = "",
@@ -143,36 +144,5 @@
         } # Not really cares if .envrc exists
       }
     '';
-    # flake-lsp = ''
-    #   def "flake lsp" [
-    #     --lsp: table<name: string, package: string> = [],
-    #     --packages (-p): string = "",
-    #     --dry,
-    #     --use-nixpkgs-unstable,
-    #   ] {
-    #     mut expr = ""
-    #     if ($use_nixpkgs_unstable) {
-    #       $expr += (cat ${config.lib.flake-lsp-top})
-    #     } else {
-    #       $expr += (cat ${config.lib.flake-lsp-os})
-    #     }
-    #
-    #     for server in $lsp {
-    #       $expr += $"              \"($server.name)\" = ";
-    #       $expr += $"($server.package);\n"
-    #     }
-    #     $expr += (cat ${config.lib.flake-lsp-middle})
-    #     $expr += $"($packages)\n"
-    #     $expr += (cat ${config.lib.flake-lsp-bottom})
-    #
-    #     echo $expr
-    #     print $expr
-    #     if (not $dry) {
-    #       let tmp = (mktemp -d -p ~/Run)
-    #       $expr | save $"($tmp)/flake.nix"
-    #       nix develop $tmp
-    #     }
-    #   }
-    # '';
   in cmds;
 }
