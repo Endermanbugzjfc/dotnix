@@ -1,4 +1,4 @@
-{ inputs, pkgs, lib, ... }: {
+{ pkgs, lib, inputs, ... }: {
   home.packages = with pkgs; [
     brightnessctl
     home-manager
