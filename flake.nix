@@ -57,6 +57,7 @@
 
     plover.url = "github:openstenoproject/plover-flake";
     nix-update-input.url = "github:vimjoyer/nix-update-input";
+    nixche.url = "github:ezjfc/nixche";
   };
 
   outputs = {
