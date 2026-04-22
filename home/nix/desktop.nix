@@ -1,5 +1,5 @@
 { config, pkgs, lib, inputs, ... }: let
-  monitor = ",preferred,auto,1.2";
+  monitor = ",preferred,auto,1.0";
   # monitor = ",preferred,auto,2.0";
 
   # Experiment log 2025-11-08: Citrix Workspace scaling works with static
