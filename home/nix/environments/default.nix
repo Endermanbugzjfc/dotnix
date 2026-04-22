@@ -7,5 +7,6 @@
     ./nix.nix
     ./js.nix
     ./php.nix
+    ./c.nix
   ];
 }
