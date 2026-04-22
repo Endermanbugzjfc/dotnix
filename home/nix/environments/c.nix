@@ -2,5 +2,6 @@
   home.packages = with pkgs; [
     man-pages
     man-pages-posix
+    clang-tools # Clangd LSP
   ];
 }

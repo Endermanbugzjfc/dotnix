@@ -1,14 +1,8 @@
-{ config, pkgs, ... }: {
+{ pkgs, ... }: {
   home.packages = with pkgs; [
     nodejs
     postman
+    typescript-language-server
   ];
-
-  mobile-shells.ts = {
-    packages = [];
-    lsps = {
-      ts_ls = pkgs.typescript-language-server;
-    };
-  };
 }
 

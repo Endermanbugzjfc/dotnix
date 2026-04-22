@@ -8,5 +8,6 @@
     ./js.nix
     ./php.nix
     ./c.nix
+    ./lua.nix
   ];
 }
