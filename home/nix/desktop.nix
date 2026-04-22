@@ -252,7 +252,7 @@ in {
       }];
     };
   };
-  services.swww = {
+  services.awww = {
     enable = true;
   };
   programs.hyprlock = {
