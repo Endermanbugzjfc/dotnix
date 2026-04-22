@@ -9,7 +9,7 @@
   programs.kitty = {
     enable = true;
     font.name = "NotoMono Nerd Font Mono";
-    font.size = 12;
+    font.size = 14;
     settings = {
       include = "./Adapta Nokto Maia.conf";
       enable_audio_bell = false;
