@@ -54,6 +54,7 @@ in {
     libnotify
 
     qalculate-gtk
+    termdown
   ];
 
   wayland.windowManager.hyprland.enable = true;
