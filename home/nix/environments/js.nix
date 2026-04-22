@@ -1,6 +1,7 @@
 { config, pkgs, ... }: {
   home.packages = with pkgs; [
     nodejs
+    postman
   ];
 
   mobile-shells.ts = {
