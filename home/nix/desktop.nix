@@ -81,7 +81,11 @@ in {
     };
 
     # Official scorlling layout added on 0.54:
-    general.layout = "scrolling";
+    general.layout = "dwindle";
+    dwindle = {
+      pseudotile = true;
+    };
+
     scrolling = {
       inherit column_width;
       fullscreen_on_one_column = false;
@@ -100,10 +104,10 @@ in {
     # xwayland.force_zero_scaling = "false";
 
     gesture = [
-      # "3, swipe, resize"
+      "3, swipe, resize"
       # "4, down, overview:toggle"
-      "3, left, dispatcher, movefocus, r"
-      "3, right, dispatcher, movefocus, l"
+      # "3, left, dispatcher, movefocus, r"
+      # "3, right, dispatcher, movefocus, l"
       # https://www.reddit.com/r/hyprland/comments/1rkhwar/change_focus_windows_with_gesture/
     ];
 
