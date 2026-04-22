@@ -81,7 +81,11 @@ in {
     };
 
     # Official scorlling layout added on 0.54:
-    general.layout = "scrolling";
+    general.layout = "dwindle";
+    dwindle = {
+      pseudotile = true;
+    };
+
     scrolling = {
       inherit column_width;
       fullscreen_on_one_column = false;
