@@ -4,6 +4,8 @@
   environment.systemPackages = with pkgs; [
     openvpn
     sshfs
+
+    proton-vpn
   ];
 
   lazy-services = [

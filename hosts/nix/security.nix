@@ -3,6 +3,8 @@
     keybase-gui
     inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     openssl
+
+    proton-pass
   ];
 
   lazy-services = [
