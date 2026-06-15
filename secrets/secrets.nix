@@ -4,5 +4,5 @@ let
     rickastley
   ];
 in {
-  "Ezjfc_private.pgp.age".publicKeys = keys;
+  "github_rate_limit_pat.conf.age".publicKeys = keys;
 }
