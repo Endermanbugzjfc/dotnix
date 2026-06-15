@@ -235,10 +235,6 @@ in {
     ];
   };
 
-  programs.eww = {
-    enable = true;
-    enableBashIntegration = true;
-  };
   programs.wofi = {
     enable = true;
   };
