@@ -42,8 +42,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    agenix.url = "github:ryantm/agenix";
-
     # stylix = {
     #   url = "github:danth/stylix";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -65,7 +63,6 @@
     self,
     nixpkgs,
     home-manager,
-    agenix,
     nixpkgs-25_05,
     ...
   } @ inputs : let
@@ -78,7 +75,6 @@
       extraSpecialArgs = specialArgs;
       users.rickastley = ./home/nix/home.nix;
     };
-    agenixModule = agenix.nixosModules.default;
   in {
     nixosConfigurations.nix = nixpkgs.lib.nixosSystem (let
       system = "x86_64-linux";
@@ -89,7 +85,6 @@
         ./hosts/nix
         homeModule # TODO: move to home.nix
         nixHome # TODO: partially move to home.nix
-        agenixModule # TODO: move to security.nix
       ];
     });
 
