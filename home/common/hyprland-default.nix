@@ -183,7 +183,7 @@
   # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
   dwindle = {
     # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-    "pseudotile" = lib.mkDefault "true";
+    # "pseudotile" = lib.mkDefault "true";
     # You probably want this
     "preserve_split" = lib.mkDefault "true";
   };
@@ -254,7 +254,7 @@
     "\$mainMod, V, togglefloating,"
     "\$mainMod, R, exec, \$menu"
     "\$mainMod, P, pseudo," # dwindle
-    "\$mainMod, J, togglesplit," # dwindle
+    "\$mainMod, J, layoutmsg, togglesplit" # dwindle
 
     # Move focus with mainMod + arrow keys
     "\$mainMod, left, movefocus, l"

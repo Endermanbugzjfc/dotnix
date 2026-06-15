@@ -52,6 +52,7 @@
 
     # Hyprland stuff:
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
+    # marble-shell.url = "git+ssh://git@github.com/Aylur/marble-shell";
 
     # mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
 

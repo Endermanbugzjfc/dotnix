@@ -10,14 +10,34 @@
   thin_column_width = "0.382";
   column_width = golden_reciprocal;
 in {
-  home.packages = with pkgs; [
-    pyprland
+  home.packages = let
+    packages = with pkgs; [
+      pyprland
 
-    grim  # Screenshot.
-    slurp # Screen region selection.
-    satty # Annotation tool
+      wayscriber # Annotation tool
 
-    (writeShellScriptBin "hyprland-toggle-upside-down" ''
+      upsidedown
+      nodim
+
+      hyprpicker
+      waypaper
+
+      hyprland-qt-support
+      hyprqt6engine
+
+      vlc
+
+      # Reminder: VLC is an unsafe protocol:
+      wlvncc
+
+      # I never liked desktop notifications but Plover depends on notify-send:
+      libnotify
+
+      qalculate-gtk
+      termdown
+    ];
+
+    upsidedown = (pkgs.writeShellScriptBin "upsidedown" ''
       #!/usr/bin/env bash
       # Turn screen upside down:
       # https://www.reddit.com/r/hyprland/comments/114rlm4/hyprctl_command_for_screen_rotation/
@@ -27,37 +47,15 @@ in {
         PREP+=',transform,2'
       fi
       exec $PREP
-    '')
-    (writeShellScriptBin "nodim" ''
+    '');
+    nodim = (pkgs.writeShellScriptBin "nodim" ''
       hyprctl keyword decoration:dim_special 0
-    '')
-    (let
-      plugins = config.wayland.windowManager.hyprland.plugins;
-      lines = lib.forEach plugins (plugin: "hyprctl plugin unload ${plugin}/lib/lib${plugin.pname}.so");
-    in writeShellScriptBin "hyprland-unload-plugins" (lib.concatStringsSep "\n" lines))
-
-    hyprpicker
-    waypaper
-    (writeShellScriptBin "hyprdoc" ''
-      xdg-open https://wiki.hypr.land/
-    '')
-
-    hyprland-qt-support
-    inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.default
-
-    vlc
-
-    # Reminder: VLC is an unsafe protocol:
-    wlvncc
-
-    # I never liked desktop notifications but Plover depends on notify-send:
-    libnotify
-
-    qalculate-gtk
-    termdown
-  ];
+    '');
+    hyprqt6engine = inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  in packages;
 
   wayland.windowManager.hyprland.enable = true;
+  wayland.windowManager.hyprland.configType = "hyprlang";
   # wayland.windowManager.hyprland.package = let
   #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   # in package;
@@ -83,9 +81,6 @@ in {
 
     # Official scorlling layout added on 0.54:
     general.layout = "dwindle";
-    dwindle = {
-      pseudotile = true;
-    };
 
     scrolling = {
       inherit column_width;
