@@ -87,13 +87,17 @@
     signing.key = "CB0AE55D51722FA6";
     # signing.key = "3A70714AD76B80F0";
   };
-  programs.ssh.enable = true;
-  programs.ssh.enableDefaultConfig = false;
-  programs.ssh.matchBlocks."github.com" = {
-    hostname = "github.com";
-    user = "git";
-    identityFile = "~/.ssh/github_ezjfc";
-    identitiesOnly = true;
+  programs.ssh.settings."github.com" = {
+    HostName = "github.com";
+    User = "git";
+    IdentityFile = "~/.ssh/github_ezjfc"; # Type: RSA
+    IdentitiesOnly = "yes";
+  };
+  programs.ssh.settings."gitlab.cse.unsw.edu.au" = {
+    HostName = "gitlab.cse.unsw.edu.au";
+    User = "git";
+    IdentityFile = "~/.ssh/id_ed25519.unsw_gitlab";
+    IdentitiesOnly = "yes";
   };
 
   programs.lazygit.enable = true;
