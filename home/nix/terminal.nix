@@ -31,6 +31,8 @@
         "kitty_mod+f>h" = "launch --stdin-source=@screen_scrollback --type=overlay nvim";
         "kitty_mod+f>g" = "launch --stdin-source=@last_cmd_output --type=overlay nvim";
 
+        # For some reason this one is not in the default config:
+        "kitty_mod+p>p" = "kitten hints --type path --program -";
       }] ++ copyBinds);
       copyBinds = [
         (mkCopyBind "p" "path")
@@ -41,6 +43,7 @@
         (mkCopyBind "y" "hyperlink")
       ];
       mkCopyBind = key: type: {
+        # Using wl-copy instead of `@` so they prevent after Kitty closes:
         "kitty_mod+y>${key}" = "kitten hints --type ${type} --program wl-copy";
       };
     in binds;
