@@ -24,6 +24,7 @@ in {
 
       hyprland-qt-support
       hyprqt6engine
+      marble-shell
 
       vlc
 
@@ -51,7 +52,9 @@ in {
     nodim = (pkgs.writeShellScriptBin "nodim" ''
       hyprctl keyword decoration:dim_special 0
     '');
+
     hyprqt6engine = inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    marble-shell = inputs.marble-shell.packages.${pkgs.stdenv.hostPlatform.system}.default;
   in packages;
 
   wayland.windowManager.hyprland.enable = true;

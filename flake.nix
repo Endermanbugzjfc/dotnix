@@ -50,7 +50,12 @@
 
     # Hyprland stuff:
     hyprqt6engine.url = "github:hyprwm/hyprqt6engine";
-    # marble-shell.url = "git+ssh://git@github.com/Aylur/marble-shell";
+
+    # NOTE: run `nix flake check` before rebuilding or otherwise the clone might fail:
+    marble-shell = {
+      url = "github:ezjfc/marble-shell/improve-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
 
