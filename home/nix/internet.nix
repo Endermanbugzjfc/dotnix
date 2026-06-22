@@ -1,4 +1,4 @@
-{ pkgs, ... }: let
+{ config, pkgs, ... }: let
   zid = "z5667590";
   cse = "login0.cse.unsw.edu.au";
 in {
