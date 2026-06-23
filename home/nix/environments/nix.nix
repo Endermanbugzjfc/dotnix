@@ -54,8 +54,6 @@ in {
       repl
       repl-update
 
-      inputs.nix-update-input.packages.${pkgs.stdenv.hostPlatform.system}.default # Command: update-input.
-
       nil # LSP
     ];
     kccnp = pkgs.writeShellScriptBin "kccnp" ''

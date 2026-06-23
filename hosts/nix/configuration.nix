@@ -49,6 +49,7 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  home-manager.useGlobalPkgs = true;
   home-manager.users.root.home = {
     # username = "root";
     # homeDirectory = "/root";

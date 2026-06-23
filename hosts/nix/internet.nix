@@ -6,10 +6,13 @@
     sshfs
 
     proton-vpn
+
+    rustdesk-flutter
   ];
 
   lazy-services = [
     "sshd"
+    # "rustdesk-server"
   ];
 
   # Enable networking

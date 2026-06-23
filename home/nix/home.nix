@@ -20,13 +20,6 @@
     ./management.nix
   ];
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-      allowUnfreePredicate = (_: true);
-    };
-  }; # TODO: make common
-
   home = {
     username = "rickastley";
     homeDirectory = "/home/rickastley";

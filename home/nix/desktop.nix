@@ -308,6 +308,8 @@ in {
     "special:exposed,gapsout:60,gapsin:30,bordersize:5,border:true,shadow:false"
   ];
 
+  services.hyprpolkitagent.enable = true;
+
   home.file.".config/pypr/config.toml".text = ''
     [pyprland]
     plugins = [

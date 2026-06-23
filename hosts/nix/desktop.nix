@@ -56,38 +56,13 @@
       };
     };
   };
-  # services.xserver.displayManager.emptty = {
-  #   # supports wayland.
-  #   enable = true;
-  #   package = pkgs.callPackage "${inputs.nixsys}/packages/emptty/wrapper.nix" {
-  #     emptty-unwrapped = pkgs.emptty;
-  #   };
-  #   configuration = {
-  #     AUTOLOGIN_SESSION = "hyprland";
-  #     AUTOLOGIN = false;
-  #     AUTOLOGIN_MAX_RETRY = 2;
-  #     DEFAULT_USER = "rickastley";
-  #   };
-  # };
-  # services.displayManager.sessionData.desktops = "/run/current-system/sw";
   services.getty = {
     # autologinUser = "rickastley";
     autologinOnce = lib.mkForce false;
     # autologin = lib.mkForce false;
   };
   users.groups.nopasswdlogin.members = [ "rickastley" ];
-  # systemd.user.services.hyprland = {
-  #   unitConfig = {
-  #     BindsTo = "graphical-session.target";
-  #     # Upholds = "swaybg@333333.service";
-  #   };
-  #   serviceConfig = {
-  #     ExecStart="${config.programs.hyprland.package}/bin/Hyprland";
-  #     # RemainAfterExit="no";
-  #     # Type = "notify";
-  #   };
-  #   wantedBy = [ "default.target" ];
-  # };
+  security.polkit.enable = true;
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
