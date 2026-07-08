@@ -7,4 +7,5 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = false;
   systemd.sockets.docker.wantedBy = lib.mkForce [];
+  users.users.rickastley.extraGroups = [ "docker" ];
 }
