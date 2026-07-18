@@ -31,6 +31,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs-25_05.url = "github:nixos/nixpkgs?ref=nixos-25.05";
+    nixpkgs-26_05.url = "github:nixos/nixpkgs/release-26.05";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -67,7 +68,6 @@
     self,
     nixpkgs,
     home-manager,
-    nixpkgs-25_05,
     ...
   } @ inputs : let
     inherit (self) outputs;

@@ -279,6 +279,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-26_05": {
+      "locked": {
+        "lastModified": 1784383395,
+        "narHash": "sha256-7EbUU1Jbv/lBn9dHbYA6RA9ZOcLOf6qOs1lmShxsVKk=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "fb4ed27a6e0f8f44880ccee4a07f2eba9ca8bf72",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "release-26.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1771207753,
@@ -440,6 +456,7 @@
         "nixche": "nixche",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-25_05": "nixpkgs-25_05",
+        "nixpkgs-26_05": "nixpkgs-26_05",
         "plover": "plover"
       }
     },

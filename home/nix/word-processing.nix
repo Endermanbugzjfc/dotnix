@@ -5,6 +5,7 @@
   ];
 
   home.packages = with pkgs; [
+    affine
     obsidian
 
     wpsoffice
@@ -18,6 +19,11 @@
 # citrix:
   # nixpkgs.config.allowBroken = true;
   lib.pkgs-25_05 = import inputs.nixpkgs-25_05 ({
+    system = "x86_64-linux";
+      config.allowUnfree = true;
+      config.allowUnfreePredicate = (_: true);
+  });
+  lib.pkgs-26_05 = import inputs.nixpkgs-26_05 ({
     system = "x86_64-linux";
       config.allowUnfree = true;
       config.allowUnfreePredicate = (_: true);
