@@ -72,7 +72,22 @@
   } @ inputs : let
     inherit (self) outputs;
 
-    specialArgs = {inherit inputs outputs; };
+    system = "x86_64-linux";
+    specialArgs = {
+      inherit inputs outputs;
+
+      pkgs-25_05 = import inputs.nixpkgs-25_05 {
+        # For Citrix Workspace.
+        inherit system;
+        config.allowUnfree = true;
+        config.allowUnfreePredicate = (_: true);
+      };
+      pkgs-26_05 = import inputs.nixpkgs-26_05 {
+        inherit system;
+        config.allowUnfree = true;
+        config.allowUnfreePredicate = (_: true);
+      };
+    };
 
     homeModule = home-manager.nixosModules.home-manager;
     nixHome.home-manager = {
@@ -80,9 +95,7 @@
       users.rickastley = ./home/nix/home.nix;
     };
   in {
-    nixosConfigurations.nix = nixpkgs.lib.nixosSystem (let
-      system = "x86_64-linux";
-    in {
+    nixosConfigurations.nix = nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = specialArgs;
       modules = [
@@ -90,7 +103,7 @@
         homeModule # TODO: move to home.nix
         nixHome # TODO: partially move to home.nix
       ];
-    });
+    };
 
     # homeConfigurations = {
     #   "rickastley@nix" = home-manager.lib.homeManagerConfiguration {

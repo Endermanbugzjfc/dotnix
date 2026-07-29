@@ -23,8 +23,6 @@
       less
     ];
     ps-locked = [
-    #   # `less` seems to be broken on NixOS/Nixpkgs Kitty Terminal.
-    #   config.lib.pkgs-25_05.less
     ];
     mv-swap = pkgs.writeShellScriptBin "mv-swap" ''
       [ "$#" != "2" ] && echo "Please enter exactly two paths" && exit 1

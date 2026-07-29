@@ -1,9 +1,8 @@
-{ pkgs, ... }: {
+{ lib, pkgs, pkgs-26_05, ... }: {
   environment.systemPackages = with pkgs; [
     prismlauncher
-    mindustry
-    mindustry-wayland
-    (callPackage ../../pkgs/animdustry/package.nix {})
+    pkgs-26_05.mindustry-wayland
+    # (callPackage ../../pkgs/animdustry/package.nix {})
   ];
 
   programs.steam.enable = true;

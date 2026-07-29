@@ -1,5 +1,5 @@
 # Plover, Obsidian Notes, WPS, OnlyOffice
-{ config, pkgs, inputs, ... }: {
+{ pkgs, pkgs-25_05, inputs, ... }: {
   imports = [
     inputs.plover.homeManagerModules.plover
   ];
@@ -10,24 +10,11 @@
 
     wpsoffice
     xournalpp
-    config.lib.pkgs-25_05.citrix_workspace
+    pkgs-25_05.citrix_workspace
   ];
   wayland.windowManager.hyprland.settings.bind = [
     "$mainMod, B, exec, obsidian eval code='app.plugins.plugins[\"tray\"].showWindows()'"
   ];
-
-# citrix:
-  # nixpkgs.config.allowBroken = true;
-  lib.pkgs-25_05 = import inputs.nixpkgs-25_05 ({
-    system = "x86_64-linux";
-      config.allowUnfree = true;
-      config.allowUnfreePredicate = (_: true);
-  });
-  lib.pkgs-26_05 = import inputs.nixpkgs-26_05 ({
-    system = "x86_64-linux";
-      config.allowUnfree = true;
-      config.allowUnfreePredicate = (_: true);
-  });
 
   programs.onlyoffice.enable = true;
   programs.foliate = {

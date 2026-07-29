@@ -26,7 +26,7 @@ in {
 
       hyprland-qt-support
       hyprqt6engine
-      marble-shell
+      # marble-shell
 
       vlc
 
@@ -75,7 +75,7 @@ in {
     '');
 
     hyprqt6engine = inputs.hyprqt6engine.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    marble-shell = inputs.marble-shell.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    # marble-shell = inputs.marble-shell.packages.${pkgs.stdenv.hostPlatform.system}.default;
   in packages;
 
   wayland.windowManager.hyprland.enable = true;
