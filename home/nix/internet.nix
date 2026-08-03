@@ -1,9 +1,11 @@
-{ config, pkgs, ... }: let
+{ pkgs, ... }: let
   zid = "z5667590";
   cse = "login0.cse.unsw.edu.au";
 in {
   home.packages = with pkgs; [
-    google-chrome
+    (google-chrome.override {
+      commandLineArgs = "--disable-features=PdfSearchify";
+    })
     moonlight-qt
   ];
 
