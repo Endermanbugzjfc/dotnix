@@ -3,5 +3,6 @@
     cargo
     rust-analyzer
     lspmux # Rust-analyzer multiplexer
+    rustc
   ];
 }
