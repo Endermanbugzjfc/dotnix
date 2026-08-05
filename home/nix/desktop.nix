@@ -106,6 +106,12 @@ in {
     # Official scorlling layout added on 0.54:
     general.layout = "dwindle";
 
+    dwindle = {
+      smart_resizing = false;
+      smart_split = true;
+      precise_mouse_move = true;
+    };
+
     scrolling = {
       inherit column_width;
       fullscreen_on_one_column = false;
