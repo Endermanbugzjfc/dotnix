@@ -11,6 +11,8 @@
     wpsoffice
     xournalpp
     pkgs-25_05.citrix_workspace
+
+    krita
   ];
   wayland.windowManager.hyprland.settings.bind = [
     "$mainMod, B, exec, obsidian eval code='app.plugins.plugins[\"tray\"].showWindows()'"
