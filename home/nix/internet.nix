@@ -9,11 +9,15 @@ in {
     moonlight-qt
   ];
 
-  # services.ssh-agent.enable = true;
+  services.ssh-agent.enable = true;
   # programs.nushell.extraConfig = config.sshAuthSock.initialization.nushell;
   # programs.ssh.settings."*".AddKeysToAgent = "yes";
 
   programs.ssh.enable = true;
+  systemd.user.sessionVariables = {
+    SSH_ASKPASS = "${pkgs.lxqt.lxqt-openssh-askpass}/bin/lxqt-openssh-askpass";
+    SSH_ASKPASS_REQUIRE = "prefer";
+  };
   programs.ssh.enableDefaultConfig = false;
   programs.ssh.settings."cse ${cse}" = {
     HostName = cse;

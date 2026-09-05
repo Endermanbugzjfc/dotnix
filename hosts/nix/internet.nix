@@ -10,6 +10,9 @@
     rustdesk-flutter
   ];
 
+  programs.virt-manager.enable = true;
+  users.users.rickastley.extraGroups = [ "libvirt" ];
+
   lazy-services = [
     "sshd"
     # "rustdesk-server"
