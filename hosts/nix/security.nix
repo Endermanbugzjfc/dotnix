@@ -1,9 +1,10 @@
-{ config, lib, pkgs, inputs, ...}: {
-  environment.systemPackages = with pkgs; [
-    keybase-gui
+{ config, pkgs, pkgs-26_05, ... }: {
+  environment.systemPackages = (with pkgs; [
     openssl
-
     proton-pass
+  ]) ++ [
+    # Refusing to evaluate package 'keybase-gui-6.5.1' because it is marked as insecure
+    pkgs-26_05.keybase-gui
   ];
 
   lazy-services = [
