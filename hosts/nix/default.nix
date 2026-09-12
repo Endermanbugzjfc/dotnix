@@ -1,7 +1,7 @@
 {
   imports = [
     ../common/features/enable-cli-utils.nix
-    ../common/features/enable-service-lazy.nix
+    ../../modules/features/lazy-service.nix
 
     ./configuration.nix
     ./internet.nix

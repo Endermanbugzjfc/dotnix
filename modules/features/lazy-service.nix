@@ -2,7 +2,7 @@
   options.lazy-services = with lib; mkOption {
     type = with types; listOf str;
     description = ''
-    Services to install but do not enable them on session start.
+      System-level services to install but do not enable them on boot
     '';
     default = [];
   };
