@@ -92,7 +92,7 @@ in {
   wayland.windowManager.hyprland.settings = {
     inherit monitor;
     misc.disable_hyprland_logo = "true"; # Brought my own anime girl.
-    exec-once = "waypaper --random &"; # Animation: set imperatively in Waypaper GUI.
+    exec-once = "waypaper --random & protonvpn-app &"; # Animation: set imperatively in Waypaper GUI.
 
     general.gaps_out = "5";
     decoration.rounding = 5;
