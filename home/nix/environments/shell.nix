@@ -49,23 +49,36 @@
     enable = true;
 
     settings.edit_mode = "vi";
-    settings.history.sync_on_enter = false; # Disable shared history.
+    settings.history.file_format = "sqlite";
+    settings.history.isolation = true;
+    settings.history.sync_on_enter = true;
     settings.keybindings = let
       fg = {
-        name = "fg_on_ctrl_z";
+        name = "fg_on_ctrl";
         modifier = "control";
         keycode = "char_z";
+        mode = [ "vi_insert" "vi_normal" "emacs" ];
         event = {
           send = "executehostcommand";
           cmd =  "job unfreeze | ignore";
         };
       };
-    in [
-      (fg // { mode = "vi_insert"; })
-      (fg // { mode = "vi_normal"; })
-      (fg // { mode = "emacs"; })
-    ];
 
+      backspaceAlwaysDelete = {
+        name = "backspace_always_delete";
+        modifier = "none";
+        keycode = "backspace";
+        mode = "vi_normal";
+        event = {
+          edit = "backspace";
+        };
+      };
+
+      keybindings = [
+        fg
+        backspaceAlwaysDelete
+      ];
+    in keybindings;
     shellAliases = {
       please = "sudo";
       fg = "job unfreeze";
