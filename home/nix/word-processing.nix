@@ -13,6 +13,8 @@
     pkgs-25_05.citrix_workspace
 
     krita
+
+    poppler
   ];
   wayland.windowManager.hyprland.settings.bind = [
     "$mainMod, B, exec, obsidian eval code='app.plugins.plugins[\"tray\"].showWindows()'"
