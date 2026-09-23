@@ -1,4 +1,11 @@
-{ config, pkgs, pkgs-26_05, ... }: {
+{ config, pkgs, pkgs-26_05, inputs, ... }: {
+  imports = [
+    inputs.binary-ninja.nixosModules.binaryninja
+  ];
+
+  programs.binary-ninja.enable = true;
+  programs.binary-ninja.package = pkgs.binary-ninja-free-wayland;
+
   environment.systemPackages = (with pkgs; [
     openssl
     proton-pass

@@ -62,6 +62,9 @@
 
     plover.url = "github:openstenoproject/plover-flake";
     nixche.url = "github:ezjfc/nixche";
+
+    binary-ninja.url = "github:jchv/nix-binary-ninja";
+    binary-ninja.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
