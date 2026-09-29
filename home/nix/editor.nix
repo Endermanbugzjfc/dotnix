@@ -1,8 +1,11 @@
 # NvChad
 
-{ pkgs, ... }: {
-  home.packages = with pkgs; [
+{ pkgs, inputs, ... }: {
+  home.packages = (with pkgs; [
     claude-code
+    opencode
+  ]) ++ [
+    inputs.codex-cli.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   # config.nixpkgs.overlays = [ inputs.nixche.overlays.neovim-with-lsps ];

@@ -65,6 +65,8 @@
 
     binary-ninja.url = "github:jchv/nix-binary-ninja";
     binary-ninja.inputs.nixpkgs.follows = "nixpkgs";
+
+    codex-cli.url = "github:sadjow/codex-cli-nix";
   };
 
   outputs = {
