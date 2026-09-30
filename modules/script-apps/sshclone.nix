@@ -1,3 +1,5 @@
+# See ./sshclone.php
+
 {
   perSystem = { pkgs, ... }: {
     packages.script-apps-sshclone = pkgs.stdenvNoCC.mkDerivation {

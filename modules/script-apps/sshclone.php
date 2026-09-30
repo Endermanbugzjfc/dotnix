@@ -1,4 +1,19 @@
 <?php
+// Sshclone accepts an HTTPS repository URL but clones it via SSH.
+// This is useful when your Git is authenticated with SSH but not HTTPS.
+// Optional dry run via --dry argument.
+
+// Example (UNSW GitLab):
+// $ sshclone --dry https://gitlab.cse.unsw.edu.au/coursework/comp1531/26t1/groups/W09B_EAGLE/project-backend
+// git@gitlab.cse.unsw.edu.au:coursework/comp1531/26t1/groups/W09B_EAGLE/project-backend.git
+//
+// Example (official GitLab):
+// $ sshclone --dry https://gitlab.com/zjfc/ezjfc
+// git@gitlab.com:zjfc/ezjfc.git
+//
+// Example (official GitHub):
+// $ sshclone --dry https://github.com/Ezjfc/Ezjfc
+// git@github.com:Ezjfc/Ezjfc.git
 
 function areValidArgs($argv, $argc) {
     if ($argc === 2) {
@@ -39,13 +54,6 @@ foreach ([
         break;
     }
 }
-
-// Sample (UNSW Gitlab):
-// https://gitlab.cse.unsw.edu.au/coursework/comp1531/26t1/groups/W09B_EAGLE/project-backend
-// git@gitlab.cse.unsw.edu.au:coursework/comp1531/26t1/groups/W09B_EAGLE/project-backend.git
-//
-// Sample (official Gitlab):
-//
 
 $parts = explode("/", $url);
 array_shift($parts); // "https:/"
