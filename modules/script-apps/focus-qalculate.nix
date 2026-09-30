@@ -4,8 +4,8 @@
 
 {
   perSystem = { pkgs, ... }: {
-    packages.script-apps-check-rebar = pkgs.writeShellScriptBin "focus-qalculate" (
+    packages.script-apps-focus-qalculate = pkgs.writeShellScriptBin "focus-qalculate" (
       builtins.readFile ./focus-qalculate.sh
     );
-  }
+  };
 }

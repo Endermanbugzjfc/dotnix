@@ -1,6 +1,7 @@
 # Nix-maid profiles that can be activated without rebuilding NixOS.
 
 { lib, inputs, self, ... }: let
+
   profilesDir = "/nix/var/nix/profiles/per-user/$USER";
   prefixes = [
     "script-apps-"
@@ -9,9 +10,17 @@
   packageNames = [
     "profile-cmds"
   ];
-in {
-  flake.lib.mkMaidProfile = inputs.nix-maid;
+  hostnames = [
+    "rig"
+  ];
+  seeBelow = lib.mkOption {
+    description = "The value is defined right below the option, type omitted";
+    type = with lib.types; anything;
+  };
 
+in {
+  flake.options.lib.mkMaidProfile = seeBelow;
+  flake.config.lib.mkMaidProfile = inputs.nix-maid;
   perSystem = { lib, pkgs, self', ... }: let
     getPackagesByPrefix = prefix: assert builtins.elem prefix prefixes;
       builtins.attrValues (lib.filterAttrs (name: _: lib.hasPrefix prefix name) self'.packages);
@@ -42,7 +51,7 @@ in {
       touch $out
     '';
   };
-  flake.lib.maidProfilesRelativePath = lib.mkOption {
+  flake.options.lib.maidProfilesRelativePaths = lib.mkOption {
     description = ''
       Each Nix-maid profile will place a folder path in this list, the path will be relative to the
       repository root, this action shall be done in their default.nix
@@ -54,14 +63,8 @@ in {
     '';
     type = with lib.types; listOf str;
   };
+  flake.config.lib.maidProfilesRelativePaths = [];
 
-  flake.options.lib.hostnames = lib.mkOption {
-    description = ''
-      Each host in the hosts folder will place a hostname in this list, this action shall be done in their default.nix
-
-      This option exists for some script-apps to perform different logic based on the machine
-    '';
-    type = with lib.types; attrsOf str;
-  };
-  flake.lib.hostnames = {};
+  flake.options.lib.getHostname = seeBelow;
+  flake.config.lib.getHostname = name: assert (builtins.elem name hostnames); name;
 }
