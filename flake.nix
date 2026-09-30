@@ -5,7 +5,7 @@
     import-tree.url = "github:vic/import-tree";
 
     # Userland profile configurations:
-    nix-maid.url = "github:viperML/nix-maid";
+    nix-maid.url = "git+https://codeberg.org/viperML/nix-maid";
 
     # Personal helpers:
     nixche.url = "github:Ezjfc/nixche";
