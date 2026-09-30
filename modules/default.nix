@@ -1,6 +1,6 @@
 # Nix-maid profiles that can be activated without rebuilding NixOS.
 
-{ inputs, self, ... }: let
+{ lib, inputs, self, ... }: let
   profilesDir = "/nix/var/nix/profiles/per-user/$USER";
   prefixes = [
     "script-apps-"
@@ -42,4 +42,26 @@ in {
       touch $out
     '';
   };
+  flake.lib.maidProfilesRelativePath = lib.mkOption {
+    description = ''
+      Each Nix-maid profile will place a folder path in this list, the path will be relative to the
+      repository root, this action shall be done in their default.nix
+
+      This option exists for `entr` to auto activate a profile on edit
+    '';
+    example = ''
+      [ "modules/script-apps" ]
+    '';
+    type = with lib.types; listOf str;
+  };
+
+  flake.options.lib.hostnames = lib.mkOption {
+    description = ''
+      Each host in the hosts folder will place a hostname in this list, this action shall be done in their default.nix
+
+      This option exists for some script-apps to perform different logic based on the machine
+    '';
+    type = with lib.types; attrsOf str;
+  };
+  flake.lib.hostnames = {};
 }
