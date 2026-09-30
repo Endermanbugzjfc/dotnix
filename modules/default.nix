@@ -1,6 +1,7 @@
 # Nix-maid profiles that can be activated without rebuilding NixOS.
 
-{ lib, inputs, self, ... }: let
+{ flake-parts-lib, lib, inputs, self, ... }: let
+# {{{ Constants:
 
   profilesDir = "/nix/var/nix/profiles/per-user/$USER";
   prefixes = [
@@ -18,10 +19,12 @@
     type = with lib.types; anything;
   };
 
+# }}}
 in {
-  flake.options.lib.mkMaidProfile = seeBelow;
-  flake.config.lib.mkMaidProfile = inputs.nix-maid;
-  perSystem = { lib, pkgs, self', ... }: let
+# {{{ Nix-maid setup:
+  options.options.lib.mkMaidProfile = seeBelow;
+  config.flake.lib.mkMaidProfile = inputs.nix-maid;
+  config.perSystem = { lib, pkgs, self', ... }: let
     getPackagesByPrefix = prefix: assert builtins.elem prefix prefixes;
       builtins.attrValues (lib.filterAttrs (name: _: lib.hasPrefix prefix name) self'.packages);
   in {
@@ -34,27 +37,11 @@ in {
       name = "profile-cmds";
       paths = getPackagesByPrefix "maid-";
     };
-
-    # Sanity check on pools that automatically add packages by their prefix:
-    checks.package-names = pkgs.runCommand "package-names" {
-      leftoutPackagesName = lib.concatStringsSep ", " (
-        lib.filter (
-          name: !builtins.any (
-            prefix: lib.hasPrefix prefix name || builtins.elem name packageNames
-          ) prefixes
-        ) (builtins.attrNames self'.packages)
-      );
-    } ''
-      echo "[dotnix] Checking package-names"
-      [ "$leftoutPackagesName" != "" ] && echo "Unmatched packages: $leftoutPackagesName" && exit 1
-
-      touch $out
-    '';
   };
-  flake.options.lib.maidProfilesRelativePaths = lib.mkOption {
+  options.flake.lib.maidProfilesRelativePaths = lib.mkOption {
     description = ''
       Each Nix-maid profile will place a folder path in this list, the path will be relative to the
-      repository root, this action shall be done in their default.nix
+      repository root
 
       This option exists for `entr` to auto activate a profile on edit
     '';
@@ -63,8 +50,27 @@ in {
     '';
     type = with lib.types; listOf str;
   };
-  flake.config.lib.maidProfilesRelativePaths = [];
+  config.flake.lib.maidProfilesRelativePaths = [
+    "modules/script-apps"
+  ];
+# }}}
+# {{{ Misc definitions:
 
-  flake.options.lib.getHostname = seeBelow;
-  flake.config.lib.getHostname = name: assert (builtins.elem name hostnames); name;
+  # Sanity check on pools that automatically add packages by their prefix:
+  options.perSystem = flake-parts-lib.mkPerSystemOption {
+    options.packages = lib.mkOption {
+      apply = packages: let
+        isLeftout = name: builtins.all (prefix: !lib.hasPrefix prefix name) prefixes
+          && !builtins.elem name packageNames;
+        leftoutPackagesName = lib.concatStringsSep ", " (
+          lib.filter isLeftout (builtins.attrNames packages)
+        );
+      in lib.throwIf (leftoutPackagesName != "")
+        "[dotnix] unmatched packages: ${leftoutPackagesName}"
+        packages;
+    };
+  };
+
+  options.flake.lib.getHostname = seeBelow;
+  config.flake.lib.getHostname = name: assert (builtins.elem name hostnames); name;
 }

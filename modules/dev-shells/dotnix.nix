@@ -1,6 +1,6 @@
 # Dev environment of the repository you are currently looking at.
 
-{ inputs, ... }: {
+{ inputs, self, ... }: {
   perSystem = { pkgs, self', system, ... }: let
     nixche = inputs.nixche.packages.${system};
     inherit (nixche.write-alias-script) writeAliasScriptBin;
@@ -29,9 +29,24 @@
       in [
         nvim-config
         nvim
-      ] ++ [
-        # self'.packages.script-apps-sshclone
-      ];
+      ] ++ (with pkgs; [
+        entr
+      ]);
+
+      __useStructuredAttrs = true;
+      profilesPaths = self.lib.maidProfilesRelativePaths;
+      shellHook = ''
+        export INIT_WD=$(pwd)
+        for profile in "''${profilesPaths[@]}"; do
+          ls "$INIT_WD/$profile" #| entr -r echo "TODO: some stuff" &
+        done
+
+        on_exit() {
+          echo "Exiting"
+        }
+        #
+        trap on_exit EXIT
+      '';
     };
   };
 }
