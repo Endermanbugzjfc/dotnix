@@ -3,12 +3,9 @@
 
 {
   perSystem = { pkgs, ... }: {
-    packages.script-apps-kccnp = pkgs.writeShellApplication {
-      name = "kccnp";
-      text = ''
-        nix-shell --pure --expr '(import <nixpkgs> {}).mkShellNoCC {}'
-      '';
-    };
+    packages.script-apps-kccnp = pkgs.writeShellScriptBin "kccnp" ''
+      nix-shell --pure --expr '(import <nixpkgs> {}).mkShellNoCC {}'
+    '';
   };
 }
 

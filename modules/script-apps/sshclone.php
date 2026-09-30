@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 // Sshclone accepts an HTTPS repository URL but clones it via SSH.
 // This is useful when your Git is authenticated with SSH but not HTTPS.

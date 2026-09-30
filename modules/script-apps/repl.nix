@@ -2,12 +2,9 @@
 
 {
   perSystem = { pkgs, ... }: {
-    packages.script-apps-repl = pkgs.writeShellApplication {
-      name = "repl";
-      text = ''
-        nix repl --expr 'import <nixpkgs> {}'
-      '';
-    };
+    packages.script-apps-repl = pkgs.writeShellScriptBin "repl" ''
+      nix repl --expr 'import <nixpkgs> {}'
+    '';
   };
 }
 
