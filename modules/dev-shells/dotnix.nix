@@ -30,7 +30,7 @@
         nvim-config
         nvim
       ] ++ [
-        self'.packages.script-apps-sshclone
+        # self'.packages.script-apps-sshclone
       ];
     };
   };

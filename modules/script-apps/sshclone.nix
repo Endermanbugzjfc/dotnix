@@ -6,11 +6,12 @@
         php
         git
       ];
-      text = builtins.readFile ./sshclone.sh;
+      text = ''
+        #!${pkgs.php}
+        ${builtins.readFile ./sshclone.php}
+      '';
+
       buildCommand = "mkdir -p $out/bin; echo $text > $out/bin/sshclone";
-      meta.knownVulnerabilities = [
-        "ArbitraryCodeExecution"
-      ];
     };
   };
 }

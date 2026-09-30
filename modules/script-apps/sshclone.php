@@ -40,9 +40,12 @@ foreach ([
     }
 }
 
-// Sample:
+// Sample (UNSW Gitlab):
 // https://gitlab.cse.unsw.edu.au/coursework/comp1531/26t1/groups/W09B_EAGLE/project-backend
 // git@gitlab.cse.unsw.edu.au:coursework/comp1531/26t1/groups/W09B_EAGLE/project-backend.git
+//
+// Sample (official Gitlab):
+//
 
 $parts = explode("/", $url);
 array_shift($parts); // "https:/"
@@ -53,12 +56,15 @@ if (!str_ends_with($repo, ".git")) {
     $repo .= ".git";
 }
 
-$ssh = "git@$host:$repo";
-echo $ssh;
+$unsafeSsh = "git@$host:$repo";
+echo $unsafeSsh;
 if (shouldDryRun($argv, $argc)) {
     return;
 }
 
 echo "\n";
-system("git clone $ssh");
+$ssh = escapeshellarg($unsafeSsh);
+$status = 0;
+system("git clone $ssh", $status);
+exit($status);
 
