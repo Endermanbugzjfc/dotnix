@@ -1,8 +1,7 @@
+# Dev environment of the repository you are currently looking at.
+
 { inputs, ... }: {
-  systems = [
-    "x86_64-linux"
-  ];
-  perSystem = { system, pkgs, ... }: let
+  perSystem = { pkgs, self', system, ... }: let
     nixche = inputs.nixche.packages.${system};
     inherit (nixche.write-alias-script) writeAliasScriptBin;
     inherit (nixche.write-lua-script) writeLuaScriptShare;
@@ -30,6 +29,8 @@
       in [
         nvim-config
         nvim
+      ] ++ [
+        self'.packages.script-apps-sshclone
       ];
     };
   };

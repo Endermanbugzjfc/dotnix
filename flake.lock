@@ -51,6 +51,21 @@
         "type": "github"
       }
     },
+    "nix-maid": {
+      "locked": {
+        "lastModified": 1788342320,
+        "narHash": "sha256-mhjKZ+PqNInkCO9SFCQo0JO6H8FPosdokT1wePFvhxI=",
+        "owner": "viperML",
+        "repo": "nix-maid",
+        "rev": "92f983d34e183c32703aefd63d0884535988a53a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "viperML",
+        "repo": "nix-maid",
+        "type": "github"
+      }
+    },
     "nixche": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -107,6 +122,7 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "import-tree": "import-tree",
+        "nix-maid": "nix-maid",
         "nixche": "nixche",
         "nixpkgs": "nixpkgs"
       }

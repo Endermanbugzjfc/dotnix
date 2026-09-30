@@ -4,5 +4,5 @@ The Dotnix repostory holds my Nix flake of NixOS configuration and other parted 
 
 ### Tasks
 
-- [ ] Dev shell for this repository based on nixhce.
+- [X] Dev shell for this repository based on nixhce.
 - [ ] Pool helper scripts on all machines in one place.
