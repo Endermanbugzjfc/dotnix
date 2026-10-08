@@ -14,7 +14,7 @@
 
     krita
 
-    poppler
+    poppler-utils
   ];
   wayland.windowManager.hyprland.settings.bind = [
     "$mainMod, B, exec, obsidian eval code='app.plugins.plugins[\"tray\"].showWindows()'"
