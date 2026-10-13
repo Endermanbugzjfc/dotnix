@@ -43,6 +43,7 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixche.url = "github:ezjfc/nixche";
 
     # stylix = {
     #   url = "github:danth/stylix";
@@ -62,7 +63,6 @@
     # mindustrice.url = "/home/rickastley/Documents/ts/Mindustrice/"; # TODO: test
 
     plover.url = "github:openstenoproject/plover-flake";
-    nixche.url = "github:ezjfc/nixche";
 
     binary-ninja.url = "github:jchv/nix-binary-ninja";
     binary-ninja.inputs.nixpkgs.follows = "nixpkgs";

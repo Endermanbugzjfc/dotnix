@@ -1,9 +1,10 @@
-{ pkgs, ... }: {
-  home.packages = with pkgs; [
+{ pkgs, pkgs-26_05, ... }: {
+  home.packages = (with pkgs; [
     nodejs
     postman
     burpsuite
-    typescript-language-server
+  ]) ++ [
+    pkgs-26_05.typescript-language-server
   ];
 }
 
