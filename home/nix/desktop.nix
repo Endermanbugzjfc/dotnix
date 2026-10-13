@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }: let
+{ pkgs, pkgs-hyprland, lib, inputs, ... }: let
   monitor = ",preferred,auto,1.0";
   # monitor = ",preferred,auto,2.0";
 
@@ -79,6 +79,7 @@ in {
   in packages;
 
   wayland.windowManager.hyprland.enable = true;
+  wayland.windowManager.hyprland.package = pkgs-hyprland.hyprland;
   wayland.windowManager.hyprland.configType = "hyprlang";
   # wayland.windowManager.hyprland.package = let
   #   package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;

@@ -32,6 +32,7 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     nixpkgs-25_05.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     nixpkgs-26_05.url = "github:nixos/nixpkgs/release-26.05";
+    nixpkgs-hyprland.url = "github:nixos/nixpkgs?rev=e7439b6b14ad3cc35d05608ebca9bce01a25f5f8";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -78,20 +79,19 @@
     inherit (self) outputs;
 
     system = "x86_64-linux";
-    specialArgs = {
-      inherit inputs outputs;
-
-      pkgs-25_05 = import inputs.nixpkgs-25_05 {
+    specialArgs = let
+      importPkgs = input: import input {
         # For Citrix Workspace.
         inherit system;
         config.allowUnfree = true;
         config.allowUnfreePredicate = (_: true);
       };
-      pkgs-26_05 = import inputs.nixpkgs-26_05 {
-        inherit system;
-        config.allowUnfree = true;
-        config.allowUnfreePredicate = (_: true);
-      };
+    in {
+      inherit inputs outputs;
+
+      pkgs-25_05 = importPkgs inputs.nixpkgs-25_05;
+      pkgs-26_05 = importPkgs inputs.nixpkgs-26_05;
+      pkgs-hyprland = importPkgs inputs.nixpkgs-hyprland;
     };
 
     homeModule = home-manager.nixosModules.home-manager;
