@@ -28,8 +28,8 @@
         "kitty_mod+q" = "no_op";
         "kitty_mod+q>kitty_mod+q" = "close_tab";
 
-        "kitty_mod+f>h" = "launch --stdin-source=@screen_scrollback --type=overlay nvim";
-        "kitty_mod+f>g" = "launch --stdin-source=@last_cmd_output --type=overlay nvim";
+        "ctrl+alt+h" = "launch --stdin-source=@screen_scrollback --type=overlay nvim - -c 'set nomod'";
+        "ctrl+alt+g" = "launch --stdin-source=@last_cmd_output --type=overlay nvim - -c 'set nomod'";
 
         # For some reason this one is not in the default config:
         "kitty_mod+p>p" = "kitten hints --type path --program -";

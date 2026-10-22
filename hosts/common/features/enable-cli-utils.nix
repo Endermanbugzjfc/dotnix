@@ -13,6 +13,7 @@
     enable = lib.mkDefault true;
     defaultEditor = true;
   };
+  programs.vim.enable = true;
   programs.screen.enable = lib.mkDefault true;
   programs.git.enable = lib.mkDefault true;
 }
