@@ -1,14 +1,26 @@
 # Network services, web browsers...
 
-{ pkgs, ... }: {
+{ pkgs, pkgs-protonvpn, inputs, ... }: {
   environment.systemPackages = with pkgs; [
     openvpn
     sshfs
 
-    proton-vpn
-
     rustdesk-flutter
   ];
+
+  imports = let
+    vpn = moduleArgs: import "${inputs.nixpkgs-protonvpn}/nixos/modules/programs/proton-vpn.nix" (moduleArgs // {
+      pkgs = pkgs-protonvpn;
+    });
+  in [
+    vpn
+  ];
+
+  programs.proton-vpn = {
+    gui.enable = true;
+    protonProtocols.enable = true;
+    splitTunneling.enable = false;
+  };
 
   programs.virt-manager.enable = true;
   users.users.rickastley.extraGroups = [ "libvirt" ];

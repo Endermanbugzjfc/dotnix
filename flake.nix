@@ -33,6 +33,8 @@
     nixpkgs-25_05.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     nixpkgs-26_05.url = "github:nixos/nixpkgs/release-26.05";
     nixpkgs-hyprland.url = "github:nixos/nixpkgs?rev=e7439b6b14ad3cc35d05608ebca9bce01a25f5f8";
+    nixpkgs-protonvpn.url =
+  "github:schembriaiden/nixpkgs/proton-vpn-update";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -80,8 +82,7 @@
 
     system = "x86_64-linux";
     specialArgs = let
-      importPkgs = input: import input {
-        # For Citrix Workspace.
+      importOpts = {
         inherit system;
         config.allowUnfree = true;
         config.allowUnfreePredicate = (_: true);
@@ -89,9 +90,41 @@
     in {
       inherit inputs outputs;
 
-      pkgs-25_05 = importPkgs inputs.nixpkgs-25_05;
-      pkgs-26_05 = importPkgs inputs.nixpkgs-26_05;
-      pkgs-hyprland = importPkgs inputs.nixpkgs-hyprland;
+      pkgs-25_05 = import inputs.nixpkgs-25_05 importOpts;
+      pkgs-26_05 = import inputs.nixpkgs-26_05 importOpts;
+      pkgs-hyprland = import inputs.nixpkgs-hyprland importOpts;
+      # Build only the Proton stack from the PR, using our normal dependencies.
+      pkgs-protonvpn = import inputs.nixpkgs (importOpts // {
+        overlays = [
+          (final: prev: let
+            protonSource = inputs.nixpkgs-protonvpn;
+          in {
+            pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+              (pythonFinal: _pythonPrev: {
+                proton-vpn-api-core = pythonFinal.callPackage
+                  "${protonSource}/pkgs/development/python-modules/proton-vpn-api-core" {
+                    # Keep the PR's sparse registry support and vendor hash,
+                    # but build the fetcher with our normal dependencies.
+                    rustPlatform = final.rustPlatform // {
+                      fetchCargoVendor = final.callPackage
+                        "${protonSource}/pkgs/build-support/rust/fetch-cargo-vendor.nix" { };
+                    };
+                  };
+                proton-vpn-daemon = pythonFinal.callPackage
+                  "${protonSource}/pkgs/development/python-modules/proton-vpn-daemon" { };
+              })
+            ];
+
+            # Call linux.nix directly so withSplitTunneling can be overridden.
+            proton-vpn = final.callPackage
+              "${protonSource}/pkgs/by-name/pr/proton-vpn/linux.nix" {
+                meta = prev.proton-vpn.meta;
+              };
+            proton-vpn-cli = final.callPackage
+              "${protonSource}/pkgs/by-name/pr/proton-vpn-cli/package.nix" { };
+          })
+        ];
+      });
     };
 
     homeModule = home-manager.nixosModules.home-manager;

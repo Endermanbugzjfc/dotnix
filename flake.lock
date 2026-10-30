@@ -387,6 +387,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-protonvpn": {
+      "locked": {
+        "lastModified": 1792883754,
+        "narHash": "sha256-T9gnX40sIFrSUrdGlrplucABZLTH8/mf8qy78Vm+iD4=",
+        "owner": "schembriaiden",
+        "repo": "nixpkgs",
+        "rev": "7b0ba2296cecf9c1c21d89a191f4454e0d13b347",
+        "type": "github"
+      },
+      "original": {
+        "owner": "schembriaiden",
+        "ref": "proton-vpn-update",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1772433332,
@@ -568,6 +584,7 @@
         "nixpkgs-25_05": "nixpkgs-25_05",
         "nixpkgs-26_05": "nixpkgs-26_05",
         "nixpkgs-hyprland": "nixpkgs-hyprland",
+        "nixpkgs-protonvpn": "nixpkgs-protonvpn",
         "plover": "plover"
       }
     },
