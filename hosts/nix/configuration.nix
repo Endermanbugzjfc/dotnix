@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ pkgs, inputs, ... }:
+{ lib, pkgs, inputs, ... }:
 
 {
   imports =
@@ -16,9 +16,7 @@
   networking.hostName = "nix"; # Define your hostname.
 
   # Set your time zone.
-  time.timeZone = "Australia/Sydney";
-  # https://www.reddit.com/r/NixOS/comments/l8yyed/changing_timezone_without_nixosrebuild_switch/
-  # time.timeZone = "Asia/Hong_Kong";
+  time.timeZone = lib.mkForce null;
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
