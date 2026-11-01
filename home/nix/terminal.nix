@@ -1,5 +1,5 @@
 # Kitty terminal and kitten utilities.
-{ lib, pkgs, ... }: {
+{ lib, ... }: {
   wayland.windowManager.hyprland.settings."\$terminal" = "kitty --single-instance";
   programs.nushell.configFile.text = ''
     def --wrapped "kitten theme" [...$rest] {
@@ -28,8 +28,8 @@
         "kitty_mod+q" = "no_op";
         "kitty_mod+q>kitty_mod+q" = "close_tab";
 
-        "ctrl+alt+h" = "launch --stdin-source=@screen_scrollback --type=overlay nvim - -c 'set nomod'";
-        "ctrl+alt+g" = "launch --stdin-source=@last_cmd_output --type=overlay nvim - -c 'set nomod'";
+        "ctrl+alt+h" = ''launch --stdin-source=@last_cmd_output --type=overlay nvim - -c 'lua require("nvconfig").nvdash.load_on_startup = false' -c 'colorscheme default' -c 'set nomod'";'';
+        "ctrl+alt+g" = ''launch --stdin-source=@screen_scrollback --type=overlay nvim - -c 'lua require("nvconfig").nvdash.load_on_startup = false' -c 'colorscheme default' -c 'set nomod'";'';
 
         # For some reason this one is not in the default config:
         "kitty_mod+p>p" = "kitten hints --type path --program -";
