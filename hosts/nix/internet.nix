@@ -2,6 +2,7 @@
 
 { pkgs, pkgs-protonvpn, inputs, ... }: {
   environment.systemPackages = with pkgs; [
+    unixtools.ifconfig
     openvpn
     sshfs
 
