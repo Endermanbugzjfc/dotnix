@@ -107,7 +107,8 @@
         }
 
         # Run a disowned Bash command and quit the current Nushell session.
-        def disownq [bash_cmd: string] {
+        def disownq [...bash_cmd: string] {
+          let bash_cmd = $bash_cmd | str join " "
           job spawn { bash -c ($bash_cmd + " & disown") }
           sleep 0.2sec
           exit
