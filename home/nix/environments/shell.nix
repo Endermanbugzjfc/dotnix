@@ -106,6 +106,13 @@
           cat $real o> $symlink
         }
 
+        # Run a disowned Bash command and quit the current Nushell session.
+        def disownq [bash_cmd: string] {
+          job spawn { bash -c ($bash_cmd + " & disown") }
+          sleep 0.2sec
+          exit
+          exit
+        }
         ${lib.concatStringsSep "\n" subcommand-listers}
       '';
       cfg = config.subcommands;
